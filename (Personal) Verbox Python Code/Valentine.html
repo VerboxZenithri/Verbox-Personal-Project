@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine - Verbox ♡ Scara</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: radial-gradient(circle at top, #1b103a, #05010f);
+    overflow: hidden; font-family: system-ui, Arial, sans-serif;
+    color: white;
+  }
+  canvas { display: block; }
+  .hint {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    opacity: .8; font-size: 14px; text-align: center;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hint">Tap / Klik layar 5x untuk surprise 💖</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+const hearts = [];
+const particles = [];
+const text = "Verbox ♡ Scara";
+
+const messages = [
+  "Makasih udah selalu ada. Semoga hari ini penuh senyum & cinta 💖",
+  "No matter what, I'm grateful to have you. Happy Valentine 🌷"
+];
+
+let clickCount = 0;
+let showSurprise = false;
+
+function rand(a,b){ return Math.random()*(b-a)+a; }
+
+class Heart {
+  constructor(x, y){
+    this.x = x; 
+    this.y = y;
+    this.tx = x; 
+    this.ty = y;
+    this.spd = rand(0.4, 1.4);
+    this.a = rand(0.7, 1);
+    this.size = rand(0.35, 0.55);
+    this.wobble = rand(0, Math.PI * 2);
+  }
+  draw(){
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.scale(this.size, this.size);
+    ctx.globalAlpha = this.a;
+    
+    // Gradient untuk heart yang lebih cantik
+    const gradient = ctx.createRadialGradient(0, 0, 5, 0, 0, 25);
+    gradient.addColorStop(0, '#ff8fb3');
+    gradient.addColorStop(1, '#ff5fa2');
+    ctx.fillStyle = gradient;
+    
+    ctx.beginPath();
+    ctx.moveTo(0, -10);
+    ctx.bezierCurveTo(-15, -25, -40, -5, 0, 20);
+    ctx.bezierCurveTo(40, -5, 15, -25, 0, -10);
+    ctx.fill();
+    ctx.restore();
+  }
+  update(){
+    if(!showSurprise){
+      this.wobble += 0.05;
+      this.x += Math.sin(this.wobble) * 0.5;
+      this.y += this.spd;
+      if(this.y > H + 40){
+        this.y = -40; 
+        this.x = rand(0, W);
+        this.wobble = rand(0, Math.PI * 2);
+      }
+    } else {
+      // Transisi smooth ke posisi target
+      const dx = this.tx - this.x;
+      const dy = this.ty - this.y;
+      this.x += dx * 0.15;
+      this.y += dy * 0.15;
+    }
+  }
+}
+
+class Particle {
+  constructor(x, y){
+    this.x = x; 
+    this.y = y;
+    this.vx = rand(-3, 3);
+    this.vy = rand(-4, -1.5);
+    this.life = rand(40, 70);
+    this.maxLife = this.life;
+    this.size = rand(2, 5);
+    this.color = ['#ff5fa2', '#ff8fb3', '#ffd6ea'][Math.floor(rand(0, 3))];
+  }
+  update(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.1;
+    this.life--;
+  }
+  draw(){
+    const alpha = this.life / this.maxLife;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// Spawn hearts dengan jumlah yang cukup
+function spawnHearts(){
+  hearts.length = 0;
+  // Jumlah hearts disesuaikan dengan ukuran layar, minimal 300 untuk pembentukan text
+  const count = Math.max(300, Math.min(400, Math.floor((W * H) / 4000)));
+  for(let i = 0; i < count; i++){
+    hearts.push(new Heart(rand(0, W), rand(-H, H)));
+  }
+}
+spawnHearts();
+
+// Generate titik tulisan "I LOVE YOU" dengan algoritma yang lebih baik
+let lovePoints = [];
+function generateTextPoints(){
+  const off = document.createElement('canvas');
+  const padding = 40;
+  off.width = W;
+  off.height = H;
+  const octx = off.getContext('2d');
+
+  // Ukuran font responsif
+  const fontSize = Math.max(60, Math.min(120, Math.floor(W * 0.18)));
+  octx.clearRect(0, 0, W, H);
+  octx.fillStyle = "white";
+  octx.font = "900 " + fontSize + "px Arial Black, Arial";
+  octx.textAlign = "center";
+  octx.textBaseline = "middle";
+  octx.fillText("I LOVE YOU", W / 2, H / 2 + H * 0.08);
+
+  const img = octx.getImageData(0, 0, W, H).data;
+  lovePoints = [];
+  
+  // Sampling density disesuaikan dengan ukuran layar
+  const step = Math.max(4, Math.floor(fontSize / 15));
+
+  for(let y = 0; y < H; y += step){
+    for(let x = 0; x < W; x += step){
+      const i = (y * W + x) * 4 + 3;
+      // Threshold lebih rendah untuk menangkap lebih banyak pixel
+      if(img[i] > 50){
+        lovePoints.push({x, y});
+      }
+    }
+  }
+
+  // Shuffle points untuk distribusi heart yang lebih natural
+  for(let i = lovePoints.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [lovePoints[i], lovePoints[j]] = [lovePoints[j], lovePoints[i]];
+  }
+
+  // Assign target positions ke hearts
+  hearts.forEach((h, i) => {
+    const p = lovePoints[i % lovePoints.length];
+    h.tx = p.x;
+    h.ty = p.y;
+  });
+}
+
+function triggerSurprise(){
+  showSurprise = true;
+  generateTextPoints();
+}
+
+let t = 0;
+function loop(){
+  requestAnimationFrame(loop);
+  t += 0.04;
+  ctx.clearRect(0, 0, W, H);
+
+  // Background sparkles
+  for(let i = 0; i < 40; i++){
+    const brightness = Math.random();
+    ctx.fillStyle = `rgba(255, 255, 255, ${brightness * 0.1})`;
+    ctx.fillRect(rand(0, W), rand(0, H), 1, 1);
+  }
+
+  // Update & draw hearts
+  hearts.forEach(h => { 
+    h.update(); 
+    h.draw(); 
+  });
+
+  // Judul dengan shadow yang lebih dramatis
+  if(!showSurprise){
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.font = "bold " + Math.max(32, Math.floor(W * 0.07)) + "px system-ui";
+    ctx.shadowColor = "#ff5fa2";
+    ctx.shadowBlur = 30;
+    ctx.fillStyle = "#fff";
+    ctx.fillText(text, W / 2, H / 2 - H * 0.25);
+    ctx.restore();
+
+    // Dua baris ucapan
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.font = Math.max(13, Math.floor(W * 0.032)) + "px system-ui";
+    ctx.fillStyle = "#ffd6ea";
+    ctx.fillText(messages[0], W / 2, H / 2 - H * 0.18);
+    ctx.fillText(messages[1], W / 2, H / 2 - H * 0.14);
+    ctx.restore();
+  }
+
+  // Teks bawah saat surprise muncul
+  if(showSurprise){
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.font = "bold " + Math.max(14, Math.floor(W * 0.035)) + "px system-ui";
+    ctx.shadowColor = "#ff5fa2";
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Will you be my Valentine today? ❤️", W / 2, H / 2 + H * 0.28);
+    ctx.restore();
+  }
+
+  // Particles
+  for(let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    p.update(); 
+    p.draw();
+    if(p.life <= 0) particles.splice(i, 1);
+  }
+
+  // Click counter indicator
+  if(clickCount > 0 && clickCount < 5){
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.font = "bold " + Math.max(16, Math.floor(W * 0.04)) + "px system-ui";
+    ctx.fillStyle = "#ffd6ea";
+    ctx.fillText(`${clickCount}/5`, W / 2, H - 50);
+    ctx.restore();
+  }
+}
+loop();
+
+function boom(x, y){
+  for(let i = 0; i < 30; i++){
+    particles.push(new Particle(x, y));
+  }
+}
+
+canvas.addEventListener('click', e => {
+  if(clickCount < 5){
+    boom(e.clientX, e.clientY);
+    clickCount++;
+    if(clickCount === 5) triggerSurprise();
+  }
+});
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if(clickCount < 5){
+    const t = e.touches[0];
+    boom(t.clientX, t.clientY);
+    clickCount++;
+    if(clickCount === 5) triggerSurprise();
+  }
+});
+
+// Regenerate saat resize
+window.addEventListener('resize', () => {
+  resize();
+  spawnHearts();
+  if(showSurprise) generateTextPoints();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+[2025-10-27 20:06:21] ZenZenithri Clan menjual 1,840 unit MedKit total: $236,440,000
+[2025-10-27 20:07:36] Volhaven Shadow menjual 170 unit MP5 total: $255,000,000
+[2025-10-27 20:09:17] D.E.V. Clan menjual 998 unit Flashbang total: $102,295,000
+[2025-10-27 20:10:07] NetBurners menjual 1,535 unit Hacking Laptop total: $10,981,006,250
+[2025-10-27 20:10:32] The Dark Army menjual 123 unit Spy Drone total: $584,250,000
+[2025-10-27 20:46:48] ZenZenithri Clan menjual 1,515 unit Signal Jammer total: $16,665,000,000
+[2025-10-27 21:33:36] WorldGlitch 0x6C1 menjual 417 unit Combat Knife total: $25,355,685
+[2025-10-27 21:34:01] D.E.A.D, menjual 1,030 unit HE+Shrapnel Granade total: $455,775,000
+[2025-10-27 21:34:51] D.E.A.D, membeli 1,820 unit MedKit total: $467,740,000
+[2025-10-27 21:35:16] NWO menjual 871 unit Night Vision Goggles total: $15,242,500,000
+[2025-10-27 21:40:06] Slum Snake menjual 797 unit Machete total: $149,437,500
+[2025-10-27 21:40:31] Ghost Syndicate menjual 1,696 unit Long Sword total: $381,600,000
+[2025-10-27 21:57:21] BackdoorBreacher Community membeli 1,176 unit Survival Kit total: $441,000,000
+[2025-10-27 22:10:27] Ishima menjual 232 unit First Aid Kit total: $44,660,000
+[2025-10-27 22:11:17] The Convenant menjual 1,152 unit Katana total: $345,600,000
+[2025-10-27 22:21:52] Ghost Syndicate menjual 749 unit Spy Drone total: $3,557,750,000
+[2025-10-27 22:22:17] D.E.V. Clan menjual 1,063 unit Hacking Laptop total: $7,604,436,250
+[2025-10-27 22:29:11] BitRunners menjual 656 unit Glock total: $152,433,408
+[2025-10-27 22:30:01] Volhaven Shadow menjual 1,170 unit Hacking Laptop total: $8,369,887,500
+[2025-10-27 22:30:26] Ishima membeli 1,138 unit Hacking Laptop total: $16,281,935,000
+[2025-10-27 22:31:17] ZenZenithri Clan menjual 928 unit Glock total: $215,637,504
+[2025-10-27 22:31:42] The Dark Army menjual 989 unit Smoke Grenade total: $61,812,500
+[2025-10-27 22:32:07] Shadow Clan menjual 346 unit Hacking Laptop total: $2,475,197,500
+[2025-10-27 22:32:32] Ghost Syndicate menjual 1,072 unit Tactical Shield total: $2,974,800,000
+[2025-10-27 22:33:22] The Convenant menjual 1,175 unit Survival Kit total: $220,312,500
+[2025-10-27 22:49:18] Black Cross Organisation menjual 171 unit Glock total: $39,734,928
+[2025-10-27 22:49:43] NetBurners membeli 133 unit Glock total: $61,809,888
+[2025-10-27 22:50:08] The Convenant membeli 519 unit Glock total: $241,197,984
+[2025-10-27 22:50:33] Black Lotus membeli 348 unit Glock total: $161,728,128
+[2025-10-27 22:50:58] D.E.A.D, menjual 1,232 unit Long Sword total: $277,200,000
+[2025-10-27 22:51:23] Volhaven Shadow menjual 710 unit Silencer (Universal) total: $230,750,000
+[2025-10-27 22:51:48] Black Lotus membeli 199 unit Glock total: $92,482,464
+[2025-10-27 22:52:13] WorldGlitch 0x6C1 menjual 1,235 unit Tactical Helmet total: $401,375,000
+[2025-10-27 22:52:38] Shadow Clan membeli 463 unit Glock total: $215,172,768
+[2025-10-27 22:53:03] NetBurners menjual 832 unit Barreta 92 total: $338,395,200
+[2025-10-27 22:53:28] Black Cross Organisation membeli 427 unit Barreta 92 total: $347,343,150
+[2025-10-27 22:53:53] Slum Snake membeli 706 unit Molotov total: $135,213,120
+[2025-10-27 22:54:18] NWO membeli 671 unit Molotov total: $128,509,920
+[2025-10-27 22:54:43] The Convenant menjual 658 unit Tactical Boots total: $82,250,000
+[2025-10-27 22:55:08] The Dark Army menjual 1,111 unit Claymore Mine total: $10,498,950,000
+[2025-10-27 22:55:33] NiteSec menjual 321 unit Glock total: $74,590,128
+[2025-10-27 22:55:58] WorldGlitch 0x6C1 membeli 265 unit Barreta 92 total: $215,564,250
+[2025-10-27 22:56:23] NWO menjual 287 unit Tactical Shield total: $796,425,000
+[2025-10-27 22:56:48] Ishima menjual 999 unit Signal Jammer total: $10,989,000,000
+[2025-10-27 22:57:13] Black Cross Organisation menjual 1,245 unit Long Sword total: $280,125,000
+[2025-10-27 22:57:38] Shadow Clan membeli 1,136 unit Molotov total: $217,566,720
+[2025-10-27 22:58:03] NWO membeli 1,249 unit Tactical Helmet total: $811,850,000
+[2025-10-27 22:58:28] NWO membeli 970 unit Claymore Mine total: $18,333,000,000
+[2025-10-27 22:58:53] BitRunners menjual 1,072 unit Colt 1911 total: $562,800,000
+[2025-10-27 22:59:18] D.E.A.D, membeli 873 unit Colt 1911 total: $916,650,000
+[2025-10-27 22:59:43] The Ruler membeli 417 unit Glock total: $193,794,912
+[2025-10-28 13:58:30] Black Lotus membeli 841 unit Smoke Grenade total: $105,125,000[2025-11-10 16:40:27] ZenZenithri Clan menjual 341 unit Katana total: $168,795,000
