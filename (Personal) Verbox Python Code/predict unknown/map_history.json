@@ -1,0 +1,1478 @@
+[
+    {
+        "guess": "italy",
+        "bot": "militia"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "militia",
+        "bot": "overpass"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "overpass"
+    },
+    {
+        "guess": "overpass",
+        "bot": "assault"
+    },
+    {
+        "guess": "ancient",
+        "bot": "ancient"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "cache"
+    },
+    {
+        "guess": "dust2",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "italy"
+    },
+    {
+        "guess": "inferno",
+        "bot": "train"
+    },
+    {
+        "guess": "italy",
+        "bot": "italy"
+    },
+    {
+        "guess": "nuke",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "italy",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "assault"
+    },
+    {
+        "guess": "ancient",
+        "bot": "militia"
+    },
+    {
+        "guess": "nuke",
+        "bot": "inferno"
+    },
+    {
+        "guess": "agency",
+        "bot": "ancient"
+    },
+    {
+        "guess": "dust2",
+        "bot": "inferno"
+    },
+    {
+        "guess": "ancient",
+        "bot": "canals"
+    },
+    {
+        "guess": "nuke",
+        "bot": "assault"
+    },
+    {
+        "guess": "militia",
+        "bot": "inferno"
+    },
+    {
+        "guess": "nuke",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "agency",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "overpass"
+    },
+    {
+        "guess": "ancient",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "inferno"
+    },
+    {
+        "guess": "overpass",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "assault"
+    },
+    {
+        "guess": "ancient",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "italy"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "italy",
+        "bot": "italy"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "ancient"
+    },
+    {
+        "guess": "italy",
+        "bot": "mirage"
+    },
+    {
+        "guess": "militia",
+        "bot": "canals"
+    },
+    {
+        "guess": "ancient",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "militia"
+    },
+    {
+        "guess": "inferno",
+        "bot": "cache"
+    },
+    {
+        "guess": "militia",
+        "bot": "train"
+    },
+    {
+        "guess": "italy",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "train"
+    },
+    {
+        "guess": "militia",
+        "bot": "cache"
+    },
+    {
+        "guess": "train",
+        "bot": "inferno"
+    },
+    {
+        "guess": "nuke",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "ancient"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "office",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "ancient",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "canals"
+    },
+    {
+        "guess": "italy",
+        "bot": "overpass"
+    },
+    {
+        "guess": "assault",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "mirage"
+    },
+    {
+        "guess": "canals",
+        "bot": "inferno"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "inferno"
+    },
+    {
+        "guess": "ancient",
+        "bot": "mirage"
+    },
+    {
+        "guess": "inferno",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "nuke",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "mirage",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "italy"
+    },
+    {
+        "guess": "cache",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "mirage",
+        "bot": "italy"
+    },
+    {
+        "guess": "dust2",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "agency"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "mirage",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "agency"
+    },
+    {
+        "guess": "inferno",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "mirage",
+        "bot": "italy"
+    },
+    {
+        "guess": "inferno",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "mirage"
+    },
+    {
+        "guess": "canals",
+        "bot": "canals"
+    },
+    {
+        "guess": "office",
+        "bot": "dust2"
+    },
+    {
+        "guess": "nuke",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "inferno",
+        "bot": "cache"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "overpass"
+    },
+    {
+        "guess": "cache",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "cache"
+    },
+    {
+        "guess": "italy",
+        "bot": "dust2"
+    },
+    {
+        "guess": "nuke",
+        "bot": "office"
+    },
+    {
+        "guess": "train",
+        "bot": "cache"
+    },
+    {
+        "guess": "inferno",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "cache"
+    },
+    {
+        "guess": "inferno",
+        "bot": "office"
+    },
+    {
+        "guess": "italy",
+        "bot": "overpass"
+    },
+    {
+        "guess": "office",
+        "bot": "cache"
+    },
+    {
+        "guess": "train",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "overpass"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "mirage",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "canals",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "canals"
+    },
+    {
+        "guess": "cache",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "mirage"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "overpass"
+    },
+    {
+        "guess": "mirage",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "canals"
+    },
+    {
+        "guess": "assault",
+        "bot": "train"
+    },
+    {
+        "guess": "italy",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "train",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "italy"
+    },
+    {
+        "guess": "dust2",
+        "bot": "nuke"
+    },
+    {
+        "guess": "ancient",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "office"
+    },
+    {
+        "guess": "agency",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "agency"
+    },
+    {
+        "guess": "inferno",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "cache",
+        "bot": "mirage"
+    },
+    {
+        "guess": "mirage",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "inferno"
+    },
+    {
+        "guess": "ancient",
+        "bot": "overpass"
+    },
+    {
+        "guess": "assault",
+        "bot": "inferno"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "italy"
+    },
+    {
+        "guess": "nuke",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "overpass"
+    },
+    {
+        "guess": "assault",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "cache",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "overpass"
+    },
+    {
+        "guess": "cache",
+        "bot": "overpass"
+    },
+    {
+        "guess": "overpass",
+        "bot": "mirage"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "train",
+        "bot": "agency"
+    },
+    {
+        "guess": "inferno",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "cache"
+    },
+    {
+        "guess": "inferno",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cache",
+        "bot": "ancient"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "overpass"
+    },
+    {
+        "guess": "ancient",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "militia"
+    },
+    {
+        "guess": "overpass",
+        "bot": "cache"
+    },
+    {
+        "guess": "train",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "italy"
+    },
+    {
+        "guess": "train",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "ancient"
+    },
+    {
+        "guess": "ancient",
+        "bot": "cache"
+    },
+    {
+        "guess": "mirage",
+        "bot": "nuke"
+    },
+    {
+        "guess": "dust2",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "ancient",
+        "bot": "inferno"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "inferno"
+    },
+    {
+        "guess": "overpass",
+        "bot": "overpass"
+    },
+    {
+        "guess": "assault",
+        "bot": "office"
+    },
+    {
+        "guess": "mirage",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "canals"
+    },
+    {
+        "guess": "train",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "italy"
+    },
+    {
+        "guess": "inferno",
+        "bot": "cache"
+    },
+    {
+        "guess": "italy",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "mirage"
+    },
+    {
+        "guess": "mirage",
+        "bot": "ancient"
+    },
+    {
+        "guess": "overpass",
+        "bot": "inferno"
+    },
+    {
+        "guess": "canals",
+        "bot": "office"
+    },
+    {
+        "guess": "train",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "mirage"
+    },
+    {
+        "guess": "mirage",
+        "bot": "militia"
+    },
+    {
+        "guess": "nuke",
+        "bot": "office"
+    },
+    {
+        "guess": "militia",
+        "bot": "assault"
+    },
+    {
+        "guess": "office",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "agency"
+    },
+    {
+        "guess": "assault",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "canals"
+    },
+    {
+        "guess": "office",
+        "bot": "office"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "canals",
+        "bot": "inferno"
+    },
+    {
+        "guess": "mirage",
+        "bot": "ancient"
+    },
+    {
+        "guess": "inferno",
+        "bot": "train"
+    },
+    {
+        "guess": "ancient",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "overpass"
+    },
+    {
+        "guess": "assault",
+        "bot": "inferno"
+    },
+    {
+        "guess": "nuke",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "canals"
+    },
+    {
+        "guess": "assault",
+        "bot": "office"
+    },
+    {
+        "guess": "inferno",
+        "bot": "ancient"
+    },
+    {
+        "guess": "ancient",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "train"
+    },
+    {
+        "guess": "italy",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "mirage"
+    },
+    {
+        "guess": "mirage",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "train"
+    },
+    {
+        "guess": "cache",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "canals"
+    },
+    {
+        "guess": "italy",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "cache"
+    },
+    {
+        "guess": "dust2",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "inferno",
+        "bot": "dust2"
+    },
+    {
+        "guess": "agency",
+        "bot": "canals"
+    },
+    {
+        "guess": "dust2",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "ancient"
+    },
+    {
+        "guess": "nuke",
+        "bot": "mirage"
+    },
+    {
+        "guess": "canals",
+        "bot": "agency"
+    },
+    {
+        "guess": "dust2",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cache",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "dust2"
+    },
+    {
+        "guess": "agency",
+        "bot": "mirage"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "inferno"
+    },
+    {
+        "guess": "agency",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "militia"
+    },
+    {
+        "guess": "cache",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cache",
+        "bot": "dust2"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "nuke"
+    },
+    {
+        "guess": "dust2",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "ancient"
+    },
+    {
+        "guess": "overpass",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "ancient"
+    },
+    {
+        "guess": "ancient",
+        "bot": "office"
+    },
+    {
+        "guess": "overpass",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "office"
+    },
+    {
+        "guess": "mirage",
+        "bot": "militia"
+    },
+    {
+        "guess": "office",
+        "bot": "dust2"
+    },
+    {
+        "guess": "dust2",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cache",
+        "bot": "office"
+    },
+    {
+        "guess": "italy",
+        "bot": "inferno"
+    },
+    {
+        "guess": "inferno",
+        "bot": "dust2"
+    },
+    {
+        "guess": "mirage",
+        "bot": "office"
+    },
+    {
+        "guess": "dust2",
+        "bot": "train"
+    },
+    {
+        "guess": "agency",
+        "bot": "inferno"
+    },
+    {
+        "guess": "train",
+        "bot": "italy"
+    },
+    {
+        "guess": "ancient",
+        "bot": "militia"
+    },
+    {
+        "guess": "italy",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "mirage"
+    },
+    {
+        "guess": "militia",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "cache"
+    },
+    {
+        "guess": "militia",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "canals",
+        "bot": "ancient"
+    },
+    {
+        "guess": "overpass",
+        "bot": "canals"
+    },
+    {
+        "guess": "canals",
+        "bot": "overpass"
+    },
+    {
+        "guess": "office",
+        "bot": "militia"
+    },
+    {
+        "guess": "militia",
+        "bot": "nuke"
+    },
+    {
+        "guess": "dust2",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "assault"
+    },
+    {
+        "guess": "canals",
+        "bot": "dust2"
+    },
+    {
+        "guess": "nuke",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "dust2"
+    },
+    {
+        "guess": "agency",
+        "bot": "mirage"
+    },
+    {
+        "guess": "inferno",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "dust2"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "nuke"
+    },
+    {
+        "guess": "dust2",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "canals"
+    },
+    {
+        "guess": "office",
+        "bot": "cache"
+    },
+    {
+        "guess": "canals",
+        "bot": "office"
+    },
+    {
+        "guess": "cache",
+        "bot": "assault"
+    },
+    {
+        "guess": "agency",
+        "bot": "cache"
+    },
+    {
+        "guess": "militia",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "assault"
+    },
+    {
+        "guess": "inferno",
+        "bot": "dust2"
+    },
+    {
+        "guess": "nuke",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "office",
+        "bot": "dust2"
+    },
+    {
+        "guess": "nuke",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "assault"
+    },
+    {
+        "guess": "assault",
+        "bot": "militia"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "militia",
+        "bot": "agency"
+    },
+    {
+        "guess": "dust2",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "dust2",
+        "bot": "train"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cache",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "dust2"
+    },
+    {
+        "guess": "overpass",
+        "bot": "italy"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "canals"
+    },
+    {
+        "guess": "train",
+        "bot": "militia"
+    },
+    {
+        "guess": "italy",
+        "bot": "dust2"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "overpass"
+    },
+    {
+        "guess": "inferno",
+        "bot": "assault"
+    },
+    {
+        "guess": "ancient",
+        "bot": "mirage"
+    },
+    {
+        "guess": "overpass",
+        "bot": "cache"
+    },
+    {
+        "guess": "train",
+        "bot": "cache"
+    },
+    {
+        "guess": "cache",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "ancient"
+    },
+    {
+        "guess": "dust2",
+        "bot": "ancient"
+    },
+    {
+        "guess": "ancient",
+        "bot": "train"
+    },
+    {
+        "guess": "dust2",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "train",
+        "bot": "office"
+    },
+    {
+        "guess": "ancient",
+        "bot": "mirage"
+    },
+    {
+        "guess": "inferno",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "agency"
+    },
+    {
+        "guess": "inferno",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "mirage"
+    },
+    {
+        "guess": "agency",
+        "bot": "agency"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "canals"
+    },
+    {
+        "guess": "cache",
+        "bot": "assault"
+    },
+    {
+        "guess": "canals",
+        "bot": "office"
+    },
+    {
+        "guess": "overpass",
+        "bot": "agency"
+    },
+    {
+        "guess": "office",
+        "bot": "train"
+    },
+    {
+        "guess": "train",
+        "bot": "agency"
+    },
+    {
+        "guess": "agency",
+        "bot": "italy"
+    },
+    {
+        "guess": "italy",
+        "bot": "cache"
+    },
+    {
+        "guess": "overpass",
+        "bot": "agency"
+    },
+    {
+        "guess": "cache",
+        "bot": "vertigo"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "italy"
+    },
+    {
+        "guess": "agency",
+        "bot": "office"
+    },
+    {
+        "guess": "italy",
+        "bot": "italy"
+    },
+    {
+        "guess": "inferno",
+        "bot": "inferno"
+    },
+    {
+        "guess": "overpass",
+        "bot": "office"
+    },
+    {
+        "guess": "inferno",
+        "bot": "italy"
+    },
+    {
+        "guess": "office",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "ancient"
+    },
+    {
+        "guess": "dust2",
+        "bot": "mirage"
+    },
+    {
+        "guess": "canals",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "vertigo",
+        "bot": "office"
+    },
+    {
+        "guess": "italy",
+        "bot": "office"
+    },
+    {
+        "guess": "office",
+        "bot": "office"
+    },
+    {
+        "guess": "inferno",
+        "bot": "mirage"
+    },
+    {
+        "guess": "office",
+        "bot": "cobblestone"
+    },
+    {
+        "guess": "cobblestone",
+        "bot": "cache"
+    },
+    {
+        "guess": "overpass",
+        "bot": "nuke"
+    },
+    {
+        "guess": "nuke",
+        "bot": "dust2"
+    },
+    {
+        "guess": "italy",
+        "bot": "ancient"
+    },
+    {
+        "guess": "mirage",
+        "bot": "nuke"
+    },
+    {
+        "guess": "dust2",
+        "bot": "italy"
+    },
+    {
+        "guess": "ancient",
+        "bot": "inferno"
+    },
+    {
+        "guess": "overpass",
+        "bot": "train"
+    },
+    {
+        "guess": "italy",
+        "bot": "mirage"
+    }
+]

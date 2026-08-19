@@ -1,0 +1,124 @@
+import json
+import os
+import inquirer
+from collections import defaultdict
+
+# The fixed CS map pool for the bot
+CS_MAPS = [
+    "ancient","agency","assault","cache","canals", 
+    "cobblestone","dust2","inferno","italy","militia", 
+    "mirage","nuke","office","overpass","train","vertigo"
+]
+
+class DMP:
+    def __init__(self, db_filename="map_history.json"):
+        self.db_filename = db_filename
+        self.history = []
+        
+        self.transition_matrix = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+        self.fallback_matrix = defaultdict(lambda: defaultdict(int))
+        
+        self.load_history()
+        self.train_model()
+
+    def load_history(self):
+        if os.path.exists(self.db_filename):
+            with open(self.db_filename, "r") as f:
+                self.history = json.load(f)
+
+    def save_history(self):
+        with open(self.db_filename, "w") as f:
+            json.dump(self.history, f, indent=4)
+
+    def train_model(self):
+        self.transition_matrix.clear()
+        self.fallback_matrix.clear()
+        
+        bot_sequence = [entry["bot"] for entry in self.history]
+        length = len(bot_sequence)
+        
+        for i in range(length - 1):
+            current_map = bot_sequence[i]
+            next_map = bot_sequence[i + 1]
+            
+            self.fallback_matrix[current_map][next_map] += 1
+            if i >= 1:
+                prev_map = bot_sequence[i - 1]
+                self.transition_matrix[prev_map][current_map][next_map] += 1
+
+    def add_record(self, guess, bot_output):
+        self.history.append({"guess": guess, "bot": bot_output})
+        self.save_history()
+        self.train_model()
+
+    def predict_next(self):
+        if len(self.history) < 1:
+            return "Need more data..."
+            
+        last_map = self.history[-1]["bot"]
+        
+        if len(self.history) >= 2:
+            prev_map = self.history[-2]["bot"]
+            order_2_counts = self.transition_matrix.get(prev_map, {}).get(last_map, {})
+            if order_2_counts:
+                return self._calculate_probability(order_2_counts)
+                
+        order_1_counts = self.fallback_matrix.get(last_map, {})
+        if order_1_counts:
+            return self._calculate_probability(order_1_counts)
+            
+        return "Not enough data for this specific sequence yet."
+
+    def _calculate_probability(self, count_dict):
+        total_occurrences = sum(count_dict.values())
+        probabilities = {m: (c / total_occurrences) * 100 for m, c in count_dict.items()}
+        sorted_probs = sorted(probabilities.items(), key=lambda item: item[1], reverse=True)
+        return " / ".join([f"{m.capitalize()}: {p:.1f}%" for m, p in sorted_probs[:5]])
+
+
+def prompt_map(message):
+    """Generates an arrow-key selectable menu in terminal."""
+    questions = [
+        inquirer.List(
+            'map',
+            message=message,
+            choices=CS_MAPS + ["Exit Program"],
+            carousel=True # Allows looping from bottom to top
+        ),
+    ]
+    answers = inquirer.prompt(questions)
+    return answers['map'] if answers else "Exit Program"
+
+
+def main():
+    predictor = DMP()
+    print("=== DisGO Map Predictor (Interactive Terminal) ===")
+    print("Use UP/DOWN arrow keys to select, ENTER to confirm.\n")
+    
+    while True:
+        try:
+            # Step 1: Select your guess
+            guess = prompt_map("Select YOUR guess")
+            if guess == "Exit Program":
+                break
+                
+            # Step 2: Select what the bot actually rolled
+            bot_out = prompt_map("Select what the BOT showed")
+            if bot_out == "Exit Program":
+                break
+                
+            # Step 3: Log and output probability
+            predictor.add_record(guess, bot_out)
+            prediction_str = predictor.predict_next()
+            
+            print("\n" + "="*50)
+            print(f"📊 PROBABILITY FOR NEXT ROLL:")
+            print(f"👉 {prediction_str}")
+            print("="*50 + "\n")
+            
+        except KeyboardInterrupt:
+            print("\nExiting...")
+            break
+
+if __name__ == "__main__":
+    main()
