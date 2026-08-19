@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SERVER MONITOR — PDNS Database Control Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050d0a;
+    --bg2: #071410;
+    --panel: #081a12;
+    --border: #0f3a25;
+    --green: #00ff88;
+    --green-dim: #005533;
+    --yellow: #ffcc00;
+    --red: #ff2244;
+    --red-dim: #3a0010;
+    --cyan: #00eeff;
+    --dim: #1a4a30;
+    --text: #99ffcc;
+    --text-dim: #226644;
+    --orange: #ff8800;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* CRT effect */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.15) 3px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.4;
+  }
+
+  /* ===== HEADER ===== */
+  .db-header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .db-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .db-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(0,255,136,0.5);
+  }
+  .db-logo span { color: var(--cyan); }
+  .db-subtitle {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+  .db-header-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    margin-right: 6px;
+    animation: blink 2s infinite;
+  }
+  .status-dot.danger {
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    animation: blinkFast 0.5s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes blinkFast { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ===== LAYOUT ===== */
+  .dashboard {
+    display: grid;
+    grid-template-columns: 260px 1fr 280px;
+    grid-template-rows: auto 1fr auto;
+    gap: 0;
+    height: calc(100vh - 57px);
+  }
+
+  /* ===== PANELS ===== */
+  .panel {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    overflow: hidden;
+    position: relative;
+  }
+  .panel-title {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .panel-title .tag {
+    font-size: 9px;
+    background: var(--green-dim);
+    color: var(--green);
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+  .panel-title .tag.warn { background: #332200; color: var(--yellow); }
+  .panel-title .tag.danger { background: var(--red-dim); color: var(--red); }
+
+  /* ===== LEFT SIDEBAR ===== */
+  .left-sidebar {
+    grid-row: 1 / 4;
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Server list */
+  .server-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .server-item {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .server-item:hover, .server-item.active {
+    background: rgba(0,255,136,0.04);
+    border-color: var(--green-dim);
+  }
+  .server-item.breached {
+    border-color: var(--red);
+    background: rgba(255,0,50,0.05);
+    animation: itemBreach 2s infinite;
+  }
+  @keyframes itemBreach {
+    0%,100%{border-color:var(--red)} 50%{border-color:#550011}
+  }
+  .server-name { font-size: 12px; color: var(--text); margin-bottom: 4px; }
+  .server-item.breached .server-name { color: var(--red); }
+  .server-ip { font-size: 10px; color: var(--text-dim); }
+  .server-bar-wrap { margin-top: 6px; height: 3px; background: var(--dim); }
+  .server-bar { height: 100%; background: var(--green); transition: width 1s, background 0.5s; }
+  .server-item.breached .server-bar { background: var(--red); }
+
+  /* Resource meters */
+  .meters { padding: 12px; border-top: 1px solid var(--border); }
+  .meter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 11px;
+  }
+  .meter-label { color: var(--text-dim); width: 60px; }
+  .meter-bar-wrap { flex: 1; height: 6px; background: var(--dim); margin: 0 8px; }
+  .meter-bar {
+    height: 100%;
+    transition: width 1s, background 0.5s;
+  }
+  .meter-val { color: var(--green); width: 40px; text-align: right; font-size: 11px; transition: color 0.5s; }
+  .meter-val.danger { color: var(--red); }
+
+  /* ===== CENTER TOP: Charts area ===== */
+  .center-top {
+    grid-column: 2;
+    grid-row: 1;
+    height: 180px;
+  }
+  .chart-area {
+    padding: 10px 14px;
+    height: calc(100% - 36px);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  /* ===== CENTER MID: Database table ===== */
+  .center-mid {
+    grid-column: 2;
+    grid-row: 2;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .db-table-wrap { flex: 1; overflow-y: auto; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  thead { position: sticky; top: 0; z-index: 5; }
+  th {
+    background: #060f0a;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(15,58,37,0.4);
+    color: var(--text);
+    font-size: 11px;
+    white-space: nowrap;
+    transition: all 0.5s;
+  }
+  tr:hover td { background: rgba(0,255,136,0.02); }
+  .row-stolen td {
+    color: var(--red) !important;
+    background: rgba(255,0,50,0.05) !important;
+    text-decoration: line-through;
+    opacity: 0.6;
+    animation: rowFade 1s ease forwards;
+  }
+  @keyframes rowFade {
+    from { opacity: 1; background: rgba(255,0,50,0.2); }
+    to { opacity: 0.4; }
+  }
+  .row-stealing td {
+    color: var(--yellow) !important;
+    background: rgba(255,200,0,0.05) !important;
+    animation: rowPulse 0.5s infinite;
+  }
+  @keyframes rowPulse {
+    0%,100% { background: rgba(255,200,0,0.05); }
+    50% { background: rgba(255,200,0,0.12); }
+  }
+  .data-encrypted { color: var(--green-dim) !important; font-style: italic; }
+  .data-corrupt { color: var(--red) !important; }
+
+  /* ===== CENTER BOTTOM: Terminal ===== */
+  .center-bot {
+    grid-column: 2;
+    grid-row: 3;
+    height: 180px;
+  }
+  .terminal {
+    height: calc(100% - 36px);
+    overflow-y: auto;
+    padding: 10px 14px;
+    font-size: 11px;
+    line-height: 1.7;
+    background: var(--bg);
+  }
+  .terminal::-webkit-scrollbar { width: 4px; }
+  .terminal::-webkit-scrollbar-track { background: transparent; }
+  .terminal::-webkit-scrollbar-thumb { background: var(--green-dim); }
+  .log-line { display: flex; gap: 10px; }
+  .log-time { color: var(--text-dim); flex-shrink: 0; }
+  .log-msg { color: var(--text); }
+  .log-msg.info { color: var(--cyan); }
+  .log-msg.warn { color: var(--yellow); }
+  .log-msg.error { color: var(--red); animation: textBlink 1s infinite; }
+  .log-msg.success { color: var(--green); }
+  @keyframes textBlink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .cursor::after { content: '█'; animation: blink 1s infinite; }
+
+  /* ===== RIGHT SIDEBAR ===== */
+  .right-sidebar {
+    grid-row: 1 / 4;
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Integrity meter */
+  .integrity-wrap {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .integrity-ring {
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+    position: relative;
+  }
+  .integrity-ring svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--dim); stroke-width: 8; }
+  .ring-fill {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 251;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.5s ease, stroke 1s;
+  }
+  .ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    transition: color 1s;
+  }
+  .integrity-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 6px;
+  }
+
+  /* Stolen data counter */
+  .stolen-counter {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .stolen-number {
+    font-family: 'VT323', monospace;
+    font-size: 42px;
+    color: var(--red);
+    line-height: 1;
+    text-shadow: 0 0 12px rgba(255,0,50,0.6);
+    transition: all 0.3s;
+  }
+  .stolen-unit { font-size: 11px; color: var(--text-dim); letter-spacing: 2px; margin-top: 4px; }
+
+  /* Alert log */
+  .alert-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .alert-item {
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    border-left: 3px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .alert-item.critical {
+    border-left-color: var(--red);
+    background: rgba(255,0,50,0.05);
+    color: #ff8899;
+    animation: alertFlash 2s infinite;
+  }
+  @keyframes alertFlash { 0%,100%{background:rgba(255,0,50,0.05)} 50%{background:rgba(255,0,50,0.12)} }
+  .alert-item.warning { border-left-color: var(--yellow); color: #ccaa44; }
+  .alert-item.ok { border-left-color: var(--green); color: var(--text-dim); }
+  .alert-time { font-size: 10px; opacity: 0.6; margin-bottom: 3px; }
+
+  /* ===== NETWORK CHART ===== */
+  .net-bar {
+    width: 8px;
+    min-height: 4px;
+    background: var(--green);
+    transition: height 0.5s, background 0.5s;
+    border-radius: 1px 1px 0 0;
+  }
+  .net-bar.high { background: var(--red); }
+  .net-bar.mid { background: var(--yellow); }
+
+  /* ===== KEYBIND CHIPS ===== */
+  .btn-row {
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    align-items: center;
+  }
+  .kb-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: rgba(0,0,0,0.3);
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .kb-k {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    background: var(--bg2);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 2px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .kb-attack .kb-k { color: var(--red); border-color: rgba(255,0,50,0.3); border-bottom-color: rgba(255,0,50,0.5); }
+  .kb-attack { color: #884455; }
+  .kb-stop .kb-k { color: var(--green); border-color: rgba(0,255,136,0.25); border-bottom-color: rgba(0,255,136,0.5); }
+  .kb-stop { color: #337755; }
+  .kb-reset .kb-k { color: var(--dim); }
+  .kb-chip.active-flash { animation: chipFlash 0.15s ease; }
+  @keyframes chipFlash { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* scrollbar global */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="db-header">
+  <div class="db-header-left">
+    <div>
+      <div class="db-logo">PDNS<span>DB</span></div>
+      <div class="db-subtitle">PUSAT DATA NASIONAL SEMENTARA — SERVER MONITOR v4.2.1</div>
+    </div>
+  </div>
+  <div class="db-header-right">
+    <span><span class="status-dot" id="main-dot"></span><span id="main-status-text">SEMUA SISTEM NORMAL</span></span>
+    <span id="header-clock">--:--:--</span>
+    <span>OPERATOR: <span style="color:var(--green)">ADM_KOMINFO</span></span>
+  </div>
+</div>
+
+<!-- DASHBOARD GRID -->
+<div class="dashboard">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="left-sidebar panel">
+    <div class="panel-title">SERVER NODE <span class="tag" id="node-tag">5 ONLINE</span></div>
+    <div class="server-list" id="server-list">
+      <!-- populated by JS -->
+    </div>
+    <div class="meters">
+      <div class="panel-title" style="margin: -0px -0px 10px;font-size:10px;">RESOURCE USAGE</div>
+      <div class="meter-row">
+        <div class="meter-label">CPU</div>
+        <div class="meter-bar-wrap"><div class="meter-bar" id="cpu-bar" style="width:34%;background:var(--green)"></div></div>
+        <div class="meter-val" id="cpu-val">34%</div>
+      </div>
+      <div class="meter-row">
+        <div class="meter-label">RAM</div>
+        <div class="meter-bar-wrap"><div class="meter-bar" id="ram-bar" style="width:51%;background:var(--green)"></div></div>
+        <div class="meter-val" id="ram-val">51%</div>
+      </div>
+      <div class="meter-row">
+        <div class="meter-label">NET I/O</div>
+        <div class="meter-bar-wrap"><div class="meter-bar" id="net-bar" style="width:22%;background:var(--green)"></div></div>
+        <div class="meter-val" id="net-val">22%</div>
+      </div>
+      <div class="meter-row">
+        <div class="meter-label">DISK</div>
+        <div class="meter-bar-wrap"><div class="meter-bar" id="disk-bar" style="width:67%;background:var(--yellow)"></div></div>
+        <div class="meter-val" id="disk-val" style="color:var(--yellow)">67%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER TOP: Network traffic -->
+  <div class="center-top panel">
+    <div class="panel-title">NETWORK TRAFFIC — INBOUND/OUTBOUND <span class="tag" id="traffic-tag">NORMAL</span></div>
+    <div class="chart-area" id="chart-area">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- CENTER MID: Database -->
+  <div class="center-mid panel">
+    <div class="panel-title">DATABASE RECORDS — <span style="color:var(--cyan)">pdns_nasional.tbl_warga</span> <span class="tag" id="db-tag">SECURE</span></div>
+    <div class="db-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>NIK</th>
+            <th>NAMA</th>
+            <th>INSTANSI</th>
+            <th>LEVEL_AKSES</th>
+            <th>DATA_SENSITIF</th>
+            <th>ENKRIPSI</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody id="db-body">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CENTER BOTTOM: Terminal log -->
+  <div class="center-bot panel">
+    <div class="panel-title">SYSTEM LOG — REAL-TIME <span class="tag" id="log-tag">LIVE</span></div>
+    <div class="terminal" id="terminal"></div>
+    <div class="btn-row" id="keybind-bar">
+      <span class="kb-chip kb-attack" id="kb-attack-chip"><span class="kb-k">S</span> Mulai Serangan</span>
+      <span class="kb-chip kb-stop" id="kb-stop-chip"><span class="kb-k">X</span> Hentikan</span>
+      <span class="kb-chip kb-reset" id="kb-reset-chip"><span class="kb-k">R</span> Reset</span>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar panel">
+    <div class="panel-title">INTEGRITAS DATA <span class="tag" id="int-tag">TINGGI</span></div>
+    <div class="integrity-wrap">
+      <svg class="integrity-ring" viewBox="0 0 100 100" style="width:110px;height:110px">
+        <circle class="ring-bg" cx="50" cy="50" r="40"/>
+        <circle class="ring-fill" id="ring-fill" cx="50" cy="50" r="40"/>
+      </svg>
+      <div class="ring-text" id="ring-text">100%</div>
+      <div class="integrity-label">INTEGRITAS DATABASE</div>
+    </div>
+
+    <div class="panel-title" style="border-top:1px solid var(--border)">DATA DICURI <span class="tag danger" id="stolen-tag">0 RECORD</span></div>
+    <div class="stolen-counter">
+      <div class="stolen-number" id="stolen-num">0</div>
+      <div class="stolen-unit">RECORDS EXFILTRATED</div>
+      <div style="margin-top:8px;font-size:10px;color:var(--text-dim)" id="stolen-size">0.00 MB dicuri</div>
+    </div>
+
+    <div class="panel-title" style="border-top:1px solid var(--border)">ALERT LOG <span class="tag warn" id="alert-count-tag">0 ALERT</span></div>
+    <div class="alert-list" id="alert-list">
+      <div class="alert-item ok">
+        <div class="alert-time">09/05/2025 — 08:00:00</div>
+        Sistem berjalan normal. Semua node online.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const servers = [
+  { id:'srv1', name:'NODE-ALPHA', ip:'192.168.10.1', load:34, breached:false },
+  { id:'srv2', name:'NODE-BETA',  ip:'192.168.10.2', load:51, breached:false },
+  { id:'srv3', name:'NODE-GAMMA', ip:'192.168.10.3', load:29, breached:false },
+  { id:'srv4', name:'NODE-DELTA', ip:'192.168.10.4', load:62, breached:false },
+  { id:'srv5', name:'NODE-OMEGA', ip:'192.168.10.5', load:44, breached:false },
+];
+
+const dbData = [
+  { id:1, nik:'3271234567890001', nama:'BUDI SANTOSO', instansi:'KEMENDAGRI', level:'ADMIN', data:'Anggaran Khusus', enc:'AES-256' },
+  { id:2, nik:'3171987654320002', nama:'SARI DEWI RAHAYU', instansi:'BAPPENAS', level:'SUPERUSER', data:'Data Infrastruktur', enc:'RSA-4096' },
+  { id:3, nik:'3375112233440003', nama:'AHMAD FAUZI', instansi:'KEMENHAN', level:'CLASSIFIED', data:'Dok. Pertahanan', enc:'AES-256' },
+  { id:4, nik:'5102445566770004', nama:'RINA KUSUMAWATI', instansi:'KEMENKEU', level:'ADMIN', data:'APBN 2025', enc:'AES-256' },
+  { id:5, nik:'3578998877660005', nama:'DODY PRAYITNO', instansi:'BIN', level:'TOP SECRET', data:'Intel Nasional', enc:'RSA-4096' },
+  { id:6, nik:'3201556677880006', nama:'MEGA TRIYANTI', instansi:'KPK', level:'SUPERUSER', data:'Kasus Aktif', enc:'AES-256' },
+  { id:7, nik:'6471223344550007', nama:'IRWAN HIDAYAT', instansi:'POLRI', level:'ADMIN', data:'Data Tersangka', enc:'AES-256' },
+  { id:8, nik:'3273334455660008', nama:'YUNI ASTUTI', instansi:'KEMENKES', level:'USER', data:'Rekam Medis', enc:'AES-128' },
+  { id:9, nik:'3174556677880009', nama:'FAJAR NUGROHO', instansi:'DJP', level:'ADMIN', data:'Data Pajak', enc:'AES-256' },
+  { id:10, nik:'3276778899000010', nama:'LINDA SUSANTI', instansi:'KOMDIGI', level:'SUPERUSER', data:'Akses Jaringan', enc:'RSA-4096' },
+  { id:11, nik:'3172334455660011', nama:'HENDRA WIJAYA', instansi:'KEMENDAGRI', level:'USER', data:'Data KTP', enc:'AES-128' },
+  { id:12, nik:'3576890012340012', nama:'DEWI LESTARI', instansi:'BAPPENAS', level:'ADMIN', data:'Rencana Anggaran', enc:'AES-256' },
+];
+
+let rowStatus = {}; // 0=normal, 1=stealing, 2=stolen
+dbData.forEach(r => rowStatus[r.id] = 0);
+
+let netHistory = Array(40).fill(0).map(() => Math.floor(Math.random()*30+10));
+let isAttacking = false;
+let attackTimers = [];
+let stolenCount = 0;
+let integrity = 100;
+let alertCount = 0;
+
+// ===== INIT =====
+function init() {
+  renderServers();
+  renderDB();
+  renderChart();
+  setInterval(tickClock, 1000);
+  setInterval(updateResources, 2000);
+  setInterval(updateChart, 800);
+  addLog('系統起動...', 'success');
+  addLog('PDNS Database Server v4.2.1 siap.', 'success');
+  addLog('Semua 5 node terhubung. Firewall aktif.', 'info');
+  addLog('Monitoring aktif — menunggu koneksi...', 'info');
+
+  // ===== KEYBINDS =====
+  document.addEventListener('keydown', function(e) {
+    const key = e.key.toUpperCase();
+    if (key === 'S') {
+      flashChip('kb-attack-chip');
+      startAttack();
+    } else if (key === 'X') {
+      flashChip('kb-stop-chip');
+      stopAttack();
+    } else if (key === 'R') {
+      flashChip('kb-reset-chip');
+      resetAll();
+    }
+  });
+}
+
+function flashChip(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('active-flash');
+  void el.offsetWidth;
+  el.classList.add('active-flash');
+  setTimeout(() => el.classList.remove('active-flash'), 200);
+}
+
+function tickClock() {
+  document.getElementById('header-clock').textContent = new Date().toLocaleTimeString('id-ID');
+}
+
+// ===== RENDER SERVERS =====
+function renderServers() {
+  const wrap = document.getElementById('server-list');
+  wrap.innerHTML = servers.map(s => `
+    <div class="server-item ${s.breached?'breached':''}" id="${s.id}">
+      <div class="server-name">${s.breached?'⚠ ':'●'} ${s.name}</div>
+      <div class="server-ip">${s.ip} ${s.breached?'— COMPROMISED':''}</div>
+      <div class="server-bar-wrap">
+        <div class="server-bar" style="width:${s.load}%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER DB TABLE =====
+function renderDB() {
+  const body = document.getElementById('db-body');
+  body.innerHTML = dbData.map(r => {
+    const st = rowStatus[r.id];
+    let cls = '';
+    if(st === 2) cls = 'row-stolen';
+    if(st === 1) cls = 'row-stealing';
+    const name = st === 2 ? '[DATA DIHAPUS]' : r.nama;
+    const data = st === 2 ? '████████████' : r.data;
+    const enc  = st >= 1 ? `<span class="data-corrupt">BYPASSED</span>` : `<span class="data-encrypted">${r.enc}</span>`;
+    const statusBadge = st === 2
+      ? `<span style="color:var(--red);font-size:10px">✗ STOLEN</span>`
+      : st === 1
+        ? `<span style="color:var(--yellow);font-size:10px;animation:textBlink 0.5s infinite">⟳ STEALING</span>`
+        : `<span style="color:var(--green);font-size:10px">✓ SECURE</span>`;
+    return `
+      <tr class="${cls}">
+        <td>${r.id}</td>
+        <td>${st >= 1 ? r.nik.substring(0,6)+'**********' : r.nik}</td>
+        <td>${name}</td>
+        <td>${r.instansi}</td>
+        <td>${r.level}</td>
+        <td>${data}</td>
+        <td>${enc}</td>
+        <td>${statusBadge}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ===== CHART =====
+function renderChart() {
+  const area = document.getElementById('chart-area');
+  const maxH = 120;
+  area.innerHTML = netHistory.map((v,i) => {
+    const h = Math.max(4, (v/100)*maxH);
+    const cls = v > 80 ? 'high' : v > 55 ? 'mid' : '';
+    return `<div class="net-bar ${cls}" style="height:${h}px" title="${v}%"></div>`;
+  }).join('');
+}
+
+function updateChart() {
+  const last = netHistory[netHistory.length-1];
+  let next;
+  if(isAttacking) {
+    next = Math.min(100, last + Math.random()*15 - 3);
+  } else {
+    next = Math.max(5, Math.min(60, last + Math.random()*10 - 5));
+  }
+  netHistory.push(Math.floor(next));
+  netHistory.shift();
+  renderChart();
+  const tag = document.getElementById('traffic-tag');
+  const avg = netHistory.slice(-5).reduce((a,b)=>a+b)/5;
+  if(avg > 75) { tag.textContent = 'ANOMALI TINGGI'; tag.className = 'tag danger'; }
+  else if(avg > 45) { tag.textContent = 'WASPADA'; tag.className = 'tag warn'; }
+  else { tag.textContent = 'NORMAL'; tag.className = 'tag'; }
+}
+
+// ===== RESOURCES =====
+function updateResources() {
+  const items = [
+    {bar:'cpu-bar', val:'cpu-val', base:isAttacking?75:30, range:20},
+    {bar:'ram-bar', val:'ram-val', base:isAttacking?85:45, range:15},
+    {bar:'net-bar', val:'net-val', base:isAttacking?90:20, range:10},
+    {bar:'disk-bar', val:'disk-val', base:67, range:5},
+  ];
+  items.forEach(item => {
+    const v = Math.min(100, Math.max(5, item.base + Math.random()*item.range - item.range/2));
+    const pct = Math.floor(v);
+    const bar = document.getElementById(item.bar);
+    const val = document.getElementById(item.val);
+    bar.style.width = pct+'%';
+    bar.style.background = pct>85?'var(--red)':pct>65?'var(--yellow)':'var(--green)';
+    val.textContent = pct+'%';
+    val.className = 'meter-val' + (pct>85?' danger':'');
+  });
+}
+
+// ===== LOG =====
+function addLog(msg, type='') {
+  const terminal = document.getElementById('terminal');
+  const t = new Date().toLocaleTimeString('id-ID');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-time">[${t}]</span><span class="log-msg ${type}">${msg}</span>`;
+  terminal.appendChild(line);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function addAlert(msg, level='ok') {
+  alertCount++;
+  document.getElementById('alert-count-tag').textContent = alertCount + ' ALERT';
+  document.getElementById('alert-count-tag').className = level === 'critical' ? 'tag danger' : level === 'warning' ? 'tag warn' : 'tag';
+  const list = document.getElementById('alert-list');
+  const item = document.createElement('div');
+  item.className = 'alert-item ' + level;
+  const t = new Date().toLocaleTimeString('id-ID');
+  item.innerHTML = `<div class="alert-time">${new Date().toLocaleDateString('id-ID')} — ${t}</div>${msg}`;
+  list.insertBefore(item, list.firstChild);
+}
+
+// ===== INTEGRITY =====
+function setIntegrity(val) {
+  integrity = Math.max(0, val);
+  const offset = 251 * (1 - integrity/100);
+  const ring = document.getElementById('ring-fill');
+  const txt = document.getElementById('ring-text');
+  const tag = document.getElementById('int-tag');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = integrity > 70 ? 'var(--green)' : integrity > 40 ? 'var(--yellow)' : 'var(--red)';
+  txt.textContent = Math.floor(integrity)+'%';
+  txt.style.color = integrity > 70 ? 'var(--green)' : integrity > 40 ? 'var(--yellow)' : 'var(--red)';
+  if(integrity < 40) { tag.textContent='KRITIS'; tag.className='tag danger'; }
+  else if(integrity < 70) { tag.textContent='TERANCAM'; tag.className='tag warn'; }
+  else { tag.textContent='TINGGI'; tag.className='tag'; }
+}
+
+function updateStolenUI() {
+  document.getElementById('stolen-num').textContent = stolenCount;
+  document.getElementById('stolen-tag').textContent = stolenCount + ' RECORD';
+  document.getElementById('stolen-size').textContent = (stolenCount * 3.7).toFixed(2) + ' MB dicuri';
+}
+
+// ===== ATTACK =====
+function startAttack() {
+  if(isAttacking) return;
+  isAttacking = true;
+
+  // Header
+  document.getElementById('main-dot').classList.add('danger');
+  document.getElementById('main-status-text').textContent = '⚠ INTRUSION DETECTED';
+  document.getElementById('db-tag').textContent = 'UNDER ATTACK';
+  document.getElementById('db-tag').className = 'tag danger';
+
+  addLog('>>> KONEKSI TIDAK DIKENAL TERDETEKSI — 203.0.113.???', 'error');
+  addAlert('Koneksi mencurigakan dari IP asing terdeteksi', 'warning');
+
+  const t1 = setTimeout(() => {
+    addLog('>>> PORT SCAN AKTIF — mencoba bypass firewall...', 'error');
+    addLog('FIREWALL: Memblokir 127 paket mencurigakan...', 'warn');
+  }, 1200);
+
+  const t2 = setTimeout(() => {
+    addLog('>>> EKSPLOITASI CVE-2024-4877 berhasil! Root akses diperoleh.', 'error');
+    addAlert('KRITIS: Root privilege escalation berhasil!', 'critical');
+    servers[0].breached = true;
+    servers[0].load = 97;
+    renderServers();
+    document.getElementById('node-tag').textContent = '1 COMPROMISED';
+    document.getElementById('node-tag').className = 'tag danger';
+  }, 3000);
+
+  const t3 = setTimeout(() => {
+    addLog('>>> Memulai eksfiltrasi data tabel pdns_nasional.tbl_warga...', 'error');
+    addLog('SHADOW_BLADE: "Ini untuk rakyat. Data kalian akan terungkap."', 'warn');
+    stealRow(1);
+  }, 4500);
+
+  const t4 = setTimeout(() => stealRow(2), 6000);
+  const t5 = setTimeout(() => {
+    stealRow(3);
+    servers[2].breached = true;
+    servers[2].load = 99;
+    renderServers();
+    document.getElementById('node-tag').textContent = '2 COMPROMISED';
+  }, 7800);
+  const t6 = setTimeout(() => stealRow(4), 9200);
+  const t7 = setTimeout(() => {
+    stealRow(5);
+    addLog('>>> Pivot ke node GAMMA — mengambil data KEMENHAN...', 'error');
+    addAlert('Data CLASSIFIED KEMENHAN sedang dieksfiltrasi', 'critical');
+  }, 11000);
+  const t8 = setTimeout(() => stealRow(6), 12500);
+  const t9 = setTimeout(() => {
+    stealRow(7);
+    servers[4].breached = true;
+    servers[4].load = 95;
+    renderServers();
+    document.getElementById('node-tag').textContent = '3 COMPROMISED';
+  }, 14000);
+  const t10 = setTimeout(() => stealRow(8), 16000);
+  const t11 = setTimeout(() => {
+    stealRow(9);
+    addLog('>>> 9 record dicuri. Integritas database kritis.', 'error');
+    addAlert('PERINGATAN: Integritas database di bawah 30%!', 'critical');
+  }, 18000);
+  const t12 = setTimeout(() => stealRow(10), 20000);
+  const t13 = setTimeout(() => {
+    stealRow(11);
+    stealRow(12);
+    addLog('>>> SHADOW_BLADE: "Tugas selesai. Semua data aman di tangan kami."', 'error');
+    addLog('>>> Koneksi hacker diputus. Jejak dihapus.', 'warn');
+    addAlert('KRITIS: 12 record total berhasil dicuri! Segera isolasi sistem!', 'critical');
+  }, 22500);
+
+  attackTimers.push(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13);
+}
+
+function stealRow(id) {
+  rowStatus[id] = 1;
+  renderDB();
+  addLog(`>>> Mengambil record #${id} (NIK: ${dbData[id-1].nik.substring(0,8)}***)...`, 'warn');
+
+  const t = setTimeout(() => {
+    rowStatus[id] = 2;
+    stolenCount++;
+    setIntegrity(100 - (stolenCount / dbData.length * 100));
+    updateStolenUI();
+    renderDB();
+    addLog(`✗ Record #${id} — ${dbData[id-1].nama} — BERHASIL DICURI`, 'error');
+  }, 1500);
+  attackTimers.push(t);
+}
+
+function stopAttack() {
+  isAttacking = false;
+  attackTimers.forEach(clearTimeout);
+  attackTimers = [];
+  addLog('■ Simulasi serangan dihentikan manual oleh operator.', 'info');
+  // Reset row yang masih "stealing"
+  dbData.forEach(r => {
+    if(rowStatus[r.id] === 1) rowStatus[r.id] = 0;
+  });
+  renderDB();
+  addAlert('Simulasi dihentikan oleh operator.', 'warning');
+}
+
+function resetAll() {
+  stopAttack();
+  stolenCount = 0;
+  integrity = 100;
+  dbData.forEach(r => rowStatus[r.id] = 0);
+  servers.forEach(s => { s.breached = false; s.load = [34,51,29,62,44][servers.indexOf(s)]; });
+  alertCount = 0;
+  setIntegrity(100);
+  updateStolenUI();
+  renderServers();
+  renderDB();
+  document.getElementById('main-dot').classList.remove('danger');
+  document.getElementById('main-status-text').textContent = 'SEMUA SISTEM NORMAL';
+  document.getElementById('db-tag').textContent = 'SECURE';
+  document.getElementById('db-tag').className = 'tag';
+  document.getElementById('node-tag').textContent = '5 ONLINE';
+  document.getElementById('node-tag').className = 'tag';
+  document.getElementById('alert-list').innerHTML = `<div class="alert-item ok"><div class="alert-time">Sistem direset</div>Sistem kembali ke kondisi normal.</div>`;
+  document.getElementById('alert-count-tag').textContent = '0 ALERT';
+  document.getElementById('alert-count-tag').className = 'tag warn';
+  document.getElementById('terminal').innerHTML = '';
+  addLog('↺ Sistem direset ke kondisi awal.', 'success');
+  addLog('PDNS Database Server siap. Firewall aktif.', 'success');
+}
+
+init();
+</script>
+</body>
+</html>
