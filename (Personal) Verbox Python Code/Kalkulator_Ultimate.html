@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator Ultimate</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  --bg:        #0a0318;
+  --bg2:       #110525;
+  --card:      #1a0a38;
+  --card2:     #230d4a;
+  --mid:       #4a2a78;
+  --neon:      #b450ff;
+  --cyan:      #50d8ff;
+  --magenta:   #e050ff;
+  --white:     #f0e8ff;
+  --gray:      #8a7aaa;
+  --green:     #40ff90;
+  --red:       #ff4444;
+  --gold:      #ffc840;
+  --glow-neon: 0 0 16px #b450ff80;
+  --glow-cyan: 0 0 16px #50d8ff60;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    linear-gradient(rgba(80,40,120,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80,40,120,.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--mid); border-radius: 4px; }
+
+/* ── MENU ── */
+#menu-view { display: block; }
+#scene-view { display: none; }
+
+/* ── MENU HEADER ── */
+.menu-header {
+  text-align: center;
+  padding: 28px 20px 12px;
+  position: relative;
+}
+.menu-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(22px, 4vw, 44px);
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--cyan), var(--neon), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  letter-spacing: 3px;
+  filter: drop-shadow(0 0 18px #b450ff80);
+}
+.menu-subtitle {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 2px;
+}
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon), var(--cyan), transparent);
+  margin: 10px 40px 0;
+  opacity: .6;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 24px 4px;
+  flex-wrap: wrap;
+}
+.search-box {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border: 1.5px solid var(--mid);
+  border-radius: 8px;
+  padding: 0 14px;
+  height: 38px;
+  gap: 8px;
+  transition: border-color .2s;
+}
+.search-box:focus-within { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+.search-box input {
+  background: none; border: none; outline: none;
+  color: var(--white); font-family: 'Rajdhani', sans-serif;
+  font-size: 15px; flex: 1; letter-spacing: .5px;
+}
+.search-box input::placeholder { color: var(--gray); }
+.search-icon { color: var(--gray); font-size: 14px; }
+
+.tb-btn {
+  background: var(--card);
+  border: 1.5px solid var(--mid);
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 14px;
+  height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  letter-spacing: .5px;
+}
+.tb-btn:hover { border-color: var(--cyan); color: var(--cyan); background: var(--card2); }
+
+/* ── HINT LINE ── */
+.hint-line {
+  text-align: center;
+  font-size: 11px;
+  color: #5a3a7a;
+  font-family: 'Share Tech Mono', monospace;
+  padding: 2px 0 8px;
+  letter-spacing: 1px;
+}
+
+/* ── CARD GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 10px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.menu-card {
+  background: var(--card);
+  border: 1.5px solid var(--mid);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all .22s;
+  position: relative;
+  overflow: hidden;
+  min-height: 90px;
+}
+.menu-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon), var(--cyan));
+  opacity: 0;
+  transition: opacity .22s;
+}
+.menu-card:hover {
+  border-color: var(--cyan);
+  background: var(--card2);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-cyan);
+}
+.menu-card:hover::before { opacity: 1; }
+.menu-card.fav {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px #ffc84030;
+}
+.menu-card.fav::before { background: var(--gold); opacity: .6; }
+
+.card-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  color: var(--neon);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.menu-card:hover .card-num { color: var(--cyan); }
+.card-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: .5px;
+  line-height: 1.3;
+  padding-right: 36px;
+}
+
+.card-actions {
+  position: absolute;
+  top: 8px; right: 8px;
+  display: flex;
+  gap: 4px;
+}
+.card-action-btn {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--mid);
+  background: var(--bg2);
+  cursor: pointer;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  color: var(--gray);
+}
+.card-action-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.card-action-btn.star-active { color: var(--gold); border-color: var(--gold); }
+
+/* ── SCENE LAYOUT ── */
+#scene-view {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#scene-view.active { display: flex; }
+
+.scene-header {
+  background: var(--card);
+  border-bottom: 2px solid var(--neon);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 0 30px #b450ff30;
+}
+.scene-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(13px, 2vw, 20px);
+  font-weight: 700;
+  color: var(--neon);
+  text-shadow: var(--glow-neon);
+  letter-spacing: 2px;
+  flex: 1;
+  text-align: center;
+}
+.back-btn {
+  background: #4a1020;
+  border: 1.5px solid #8a3050;
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+.back-btn:hover { background: #6a2030; border-color: var(--red); color: var(--red); }
+
+.clear-btn {
+  background: #3a1010;
+  border: 1.5px solid #6a2020;
+  color: #ff8888;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.clear-btn:hover { border-color: var(--red); color: var(--white); background: #501020; }
+
+.scene-body {
+  flex: 1;
+  padding: 24px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── INPUTS ── */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 13px;
+  color: var(--gray);
+  letter-spacing: 1px;
+  font-family: 'Share Tech Mono', monospace;
+}
+.field input, .field textarea {
+  background: #120828;
+  border: 1.5px solid var(--mid);
+  color: var(--white);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+.field input:focus, .field textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: var(--glow-cyan);
+}
+.field input::selection { background: var(--mid); }
+
+/* ── BUTTONS ROW ── */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.calc-btn {
+  background: var(--mid);
+  border: 1.5px solid var(--neon);
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .18s;
+  letter-spacing: 1px;
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+}
+.calc-btn:hover {
+  background: var(--neon);
+  color: var(--bg);
+  box-shadow: var(--glow-neon);
+  transform: translateY(-1px);
+}
+.calc-btn.primary {
+  background: linear-gradient(135deg, var(--mid), var(--neon));
+  border-color: var(--cyan);
+  font-size: 15px;
+  padding: 12px 28px;
+  flex: 0 0 auto;
+}
+.calc-btn.primary:hover { background: linear-gradient(135deg, var(--neon), var(--cyan)); color: var(--bg); }
+.calc-btn.active {
+  background: var(--cyan);
+  color: var(--bg);
+  border-color: var(--white);
+  box-shadow: var(--glow-cyan);
+}
+
+/* ── RESULT BOX ── */
+.result-box {
+  background: #080215;
+  border: 2px solid var(--neon);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 8px;
+  position: relative;
+  box-shadow: var(--glow-neon);
+  animation: fadeIn .3s ease;
+  min-height: 50px;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
+
+.result-line {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+.result-line.ok { color: var(--green); }
+.result-line.err { color: var(--red); }
+.copy-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--mid);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  transition: all .2s;
+}
+.copy-btn:hover { background: var(--cyan); color: var(--bg); }
+
+/* ── UNIT SELECTOR ── */
+.unit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* ── SHAPE GRID ── */
+.shape-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.shape-preview-area {
+  background: var(--card);
+  border: 1.5px solid var(--mid);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.shape-svg-wrap {
+  flex: 0 0 auto;
+}
+.shape-formula {
+  flex: 1;
+  min-width: 160px;
+}
+.shape-formula .f-label {
+  font-size: 11px;
+  color: var(--gray);
+  font-family: 'Share Tech Mono', monospace;
+  margin-bottom: 4px;
+}
+.shape-formula .f-val {
+  font-size: 20px;
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 600;
+}
+
+/* ── MATRIX GRID ── */
+.matrix-section {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.matrix-block {
+  flex: 1;
+  min-width: 200px;
+}
+.matrix-title {
+  font-size: 12px;
+  color: var(--cyan);
+  font-family: 'Share Tech Mono', monospace;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.matrix-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.matrix-inputs input {
+  background: #120828;
+  border: 1.5px solid var(--mid);
+  color: var(--white);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  outline: none;
+  text-align: center;
+  transition: border-color .2s;
+}
+.matrix-inputs input:focus { border-color: var(--cyan); }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 12px;
+  color: var(--gray);
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  margin-top: 2px;
+}
+
+/* ── OVERLAY ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.overlay.active { display: flex; }
+.overlay-box {
+  background: #130830;
+  border: 2px solid var(--cyan);
+  border-radius: 16px;
+  padding: 28px 32px;
+  max-width: 640px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 0 60px #50d8ff40;
+  animation: fadeIn .2s ease;
+}
+.overlay-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  color: var(--cyan);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--mid);
+}
+.overlay-body { color: var(--gray); font-size: 14px; line-height: 1.7; }
+.overlay-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--mid);
+  border: 1px solid var(--neon);
+  color: var(--white);
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.overlay-close:hover { background: var(--neon); color: var(--bg); }
+
+/* ── HISTORY ── */
+.history-list { max-height: 380px; overflow-y: auto; margin-top: 10px; }
+.history-item {
+  background: var(--card);
+  border: 1px solid var(--mid);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.history-meta { font-size: 11px; color: var(--gray); font-family: 'Share Tech Mono', monospace; margin-bottom: 4px; }
+.history-result { font-size: 13px; color: var(--green); font-family: 'Share Tech Mono', monospace; word-break: break-word; }
+
+/* ── FOOTER ── */
+.watermark {
+  text-align: right;
+  font-size: 10px;
+  color: #3a1a5a;
+  font-family: 'Share Tech Mono', monospace;
+  padding: 8px 16px;
+  position: fixed;
+  bottom: 0; right: 0;
+  pointer-events: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 12px 80px; }
+  .scene-body { padding: 16px; }
+  .btn-row { gap: 7px; }
+  .calc-btn { font-size: 12px; padding: 8px 10px; }
+  .matrix-section { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ MENU ═══ -->
+<div id="menu-view">
+  <div class="menu-header">
+    <div class="menu-title">CALCULATOR ULTIMATE</div>
+    <div class="menu-subtitle">— 31 MODUL MATEMATIKA —</div>
+    <div class="divider"></div>
+  </div>
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="search-input" type="text" placeholder="Cari modul..." autocomplete="off">
+    </div>
+    <button class="tb-btn" onclick="showHistory()">📋 Riwayat</button>
+    <button class="tb-btn" id="fav-toggle" onclick="toggleFavFilter()">★ Favorit</button>
+  </div>
+  <div class="hint-line">★ = Pin Favorit &nbsp;|&nbsp; ⓘ = Info Rumus &nbsp;|&nbsp; Favorit tampil di atas</div>
+  <div class="card-grid" id="card-grid"></div>
+</div>
+
+<!-- ═══ SCENE ═══ -->
+<div id="scene-view">
+  <div class="scene-header">
+    <button class="back-btn" onclick="goBack()">◀ Kembali</button>
+    <div class="scene-title" id="scene-title">—</div>
+    <button class="clear-btn" onclick="clearScene()">✕ Clear</button>
+  </div>
+  <div class="scene-body" id="scene-body"></div>
+</div>
+
+<!-- ═══ OVERLAYS ═══ -->
+<div class="overlay" id="info-overlay" onclick="e=>e.target===this&&closeOverlay('info-overlay')">
+  <div class="overlay-box">
+    <div class="overlay-title" id="info-title">ℹ Info</div>
+    <div class="overlay-body" id="info-body"></div>
+    <button class="overlay-close" onclick="closeOverlay('info-overlay')">✕</button>
+  </div>
+</div>
+
+<div class="overlay" id="hist-overlay" onclick="e=>e.target===this&&closeOverlay('hist-overlay')">
+  <div class="overlay-box" style="max-width:700px">
+    <div class="overlay-title">📋 Riwayat Perhitungan</div>
+    <div class="overlay-body">
+      <div class="history-list" id="history-list"></div>
+    </div>
+    <button class="overlay-close" onclick="closeOverlay('hist-overlay')">✕</button>
+  </div>
+</div>
+
+<div class="watermark">Made By: Dyles Enserval Verbox</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════
+const MODULES = [
+  [1,"Operasi Dasar"],
+  [2,"Pangkat & Akar"],
+  [3,"Trigonometri"],
+  [4,"Logaritma"],
+  [5,"Faktorial & Kombinasi"],
+  [6,"Persamaan Kuadrat"],
+  [7,"Konversi Suhu"],
+  [8,"Konversi Panjang"],
+  [9,"Konversi Berat"],
+  [10,"Sistem Bilangan"],
+  [11,"Statistik"],
+  [12,"Matrix 2x2"],
+  [13,"Bilangan Prima"],
+  [14,"FPB & KPK"],
+  [15,"Pythagoras"],
+  [16,"Luas Bangun"],
+  [17,"Volume Bangun"],
+  [18,"Pecahan"],
+  [19,"Persentase"],
+  [20,"Diskon & Pajak"],
+  [21,"Bunga Sederhana"],
+  [22,"Fibonacci"],
+  [23,"Barisan Aritmatika"],
+  [24,"Aritmatika Lanjutan"],
+  [25,"Barisan Geometri"],
+  [26,"Kecepatan & Jarak"],
+  [27,"BMI Calculator"],
+  [28,"Konversi Waktu"],
+  [29,"Konversi Data"],
+  [30,"Bilangan Kompleks"],
+  [31,"Determinan 3x3"],
+];
+
+const MODULE_INFO = {
+  "Operasi Dasar":"Penjumlahan, pengurangan, perkalian, pembagian, modulus, dan perpangkatan dua bilangan.",
+  "Pangkat & Akar":"Menghitung x², x³, √x, akar-n, dan x^n untuk sembarang bilangan.",
+  "Trigonometri":"sin, cos, tan, sec, csc, cot — input derajat, output desimal presisi 6 angka.",
+  "Logaritma":"log₁₀(x), ln(x) (log natural), dan logₙ(x) dengan basis sembarang.",
+  "Faktorial & Kombinasi":"n! (faktorial), nPr (permutasi), nCr (kombinasi). Rumus: nCr = n! / (r!(n-r)!)",
+  "Persamaan Kuadrat":"ax²+bx+c=0. Solusi: x = (-b ± √(b²-4ac)) / 2a. Diskriminan: D = b²-4ac.",
+  "Konversi Suhu":"Celsius, Fahrenheit, Kelvin, Rankine, Réaumur — konversi antar semua satuan sekaligus.",
+  "Konversi Panjang":"mm, cm, dm, m, km, inci, kaki, yard, mil — berbasis 1 meter.",
+  "Konversi Berat":"mg, g, kg, ton, lb, oz, stone, karat — berbasis 1 gram.",
+  "Sistem Bilangan":"Konversi antara Desimal, Biner (2), Oktal (8), dan Heksadesimal (16).",
+  "Statistik":"Hitung N, Mean, Median, Variansi, Std Dev, Min, Max dari sekumpulan data.",
+  "Matrix 2x2":"Penjumlahan A+B, perkalian A×B, dan determinan Det(A) = ad-bc untuk matrix 2×2.",
+  "Bilangan Prima":"Cek apakah sebuah bilangan prima, atau tampilkan semua prima hingga batas N.",
+  "FPB & KPK":"FPB (faktor persekutuan terbesar) dan KPK (kelipatan persekutuan terkecil) dua bilangan.",
+  "Pythagoras":"Hitung sisi miring c = √(a²+b²) dari dua sisi siku-siku yang diketahui.",
+  "Luas Bangun":"Luas 10 bangun datar: persegi panjang, segitiga, lingkaran, trapesium, dll.",
+  "Volume Bangun":"Volume 8 bangun ruang: kubus, balok, tabung, kerucut, bola, limas, prisma, ½bola.",
+  "Pecahan":"Operasi +, -, ×, / dua pecahan a/b dan c/d. Hasil disederhanakan otomatis.",
+  "Persentase":"Hitung persentase, nilai dari total, atau selisih persentase.",
+  "Diskon & Pajak":"Hitung harga setelah diskon atau total setelah pajak ditambahkan.",
+  "Bunga Sederhana":"I = P × r × t / 100. Menghitung bunga dan total akhir modal.",
+  "Fibonacci":"Deret Fibonacci hingga n suku: 0, 1, 1, 2, 3, 5, 8, 13...",
+  "Barisan Aritmatika":"Un = a + (n-1)b. Sn = n/2 × (2a + (n-1)b). Diketahui a dan beda b.",
+  "Aritmatika Lanjutan":"Temukan a dan b dari dua suku sembarang, lalu hitung Un dan Sn.",
+  "Barisan Geometri":"Un = a × rⁿ⁻¹. Sn = a(1-rⁿ)/(1-r). Diketahui a dan rasio r.",
+  "Kecepatan & Jarak":"v = s/t, s = v×t, t = s/v. Kalkulator gerak lurus beraturan.",
+  "BMI Calculator":"BMI = Berat(kg) / Tinggi²(m). Kategori: Kurus < 18.5 < Normal < 25 < Overweight.",
+  "Konversi Waktu":"ms, detik, menit, jam, hari, minggu, bulan, tahun — berbasis 1 detik.",
+  "Konversi Data":"bit, byte, KB, MB, GB, TB, PB — berbasis 1 bit digital.",
+  "Bilangan Kompleks":"Operasi bilangan kompleks z = a+bi: penjumlahan, pengurangan, perkalian.",
+  "Determinan 3x3":"Det(A) untuk matrix 3×3 menggunakan ekspansi kofaktor baris pertama.",
+};
+
+// ══════════════════════════════════════════════════════════
+//  STORAGE
+// ══════════════════════════════════════════════════════════
+function loadData(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+
+let favorites = new Set(loadData('calc_favs',[]));
+let history   = loadData('calc_hist',[]);
+let favFilter = false;
+
+function saveFavs(){ saveData('calc_favs',[...favorites]); }
+function addHistory(module,result){
+  history.unshift({ts:new Date().toLocaleTimeString('id',{hour:'2-digit',minute:'2-digit'})+' '+new Date().toLocaleDateString('id',{day:'2-digit',month:'2-digit'}),module,result:String(result).slice(0,120)});
+  if(history.length>50)history.length=50;
+  saveData('calc_hist',history);
+}
+
+// ══════════════════════════════════════════════════════════
+//  OVERLAYS
+// ══════════════════════════════════════════════════════════
+function closeOverlay(id){ document.getElementById(id).classList.remove('active'); }
+window.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.overlay.active').forEach(o=>o.classList.remove('active')); });
+
+function showInfo(name){
+  document.getElementById('info-title').textContent='ℹ  '+name;
+  document.getElementById('info-body').textContent=MODULE_INFO[name]||'Tidak ada info.';
+  document.getElementById('info-overlay').classList.add('active');
+}
+function showHistory(){
+  const list=document.getElementById('history-list');
+  if(!history.length){list.innerHTML='<div style="color:var(--gray);font-size:13px;padding:12px">Belum ada riwayat.</div>';return;}
+  list.innerHTML=history.map(h=>`
+    <div class="history-item">
+      <div class="history-meta">${h.ts} &nbsp;·&nbsp; <span style="color:var(--neon)">[${h.module}]</span></div>
+      <div class="history-result">${h.result}</div>
+    </div>`).join('');
+  document.getElementById('hist-overlay').classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+//  MENU
+// ══════════════════════════════════════════════════════════
+function toggleFavFilter(){
+  favFilter=!favFilter;
+  document.getElementById('fav-toggle').style.color=favFilter?'var(--gold)':'';
+  buildMenu();
+}
+
+function buildMenu(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  let items=[...MODULES];
+  if(q) items=items.filter(([,n])=>n.toLowerCase().includes(q));
+  if(favFilter) items=items.filter(([i])=>favorites.has(i));
+  items.sort((a,b)=>{
+    const fa=favorites.has(a[0]),fb=favorites.has(b[0]);
+    return fa===fb?a[0]-b[0]:fa?-1:1;
+  });
+  const grid=document.getElementById('card-grid');
+  grid.innerHTML=items.map(([id,name])=>`
+    <div class="menu-card ${favorites.has(id)?'fav':''}" onclick="openScene(${id})">
+      <div class="card-actions">
+        <div class="card-action-btn ${favorites.has(id)?'star-active':''}" onclick="event.stopPropagation();toggleFav(${id})" title="Pin Favorit">★</div>
+        <div class="card-action-btn" onclick="event.stopPropagation();showInfo('${name}')" title="Info Rumus">i</div>
+      </div>
+      <div class="card-num">${String(id).padStart(2,'0')}</div>
+      <div class="card-label">${name}</div>
+    </div>`).join('');
+}
+
+function toggleFav(id){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+  saveFavs(); buildMenu();
+}
+
+document.getElementById('search-input').addEventListener('input',buildMenu);
+buildMenu();
+
+// ══════════════════════════════════════════════════════════
+//  ROUTER
+// ══════════════════════════════════════════════════════════
+let currentScene=null;
+
+function goBack(){
+  document.getElementById('scene-view').classList.remove('active');
+  document.getElementById('menu-view').style.display='';
+  currentScene=null;
+}
+function clearScene(){ if(currentScene) openScene(currentScene); }
+
+function openScene(id){
+  currentScene=id;
+  const [,name]=MODULES.find(([i])=>i===id)||[id,'—'];
+  document.getElementById('scene-title').textContent=name;
+  document.getElementById('menu-view').style.display='none';
+  document.getElementById('scene-view').classList.add('active');
+  const body=document.getElementById('scene-body');
+  body.innerHTML='';
+  const builders={
+    1:buildOperasiDasar,2:buildPangkatAkar,3:buildTrigonometri,4:buildLogaritma,
+    5:buildFaktorial,6:buildPersamaanKuadrat,7:buildKonversiSuhu,8:buildKonversiPanjang,
+    9:buildKonversiBerat,10:buildSistemBilangan,11:buildStatistik,12:buildMatrix,
+    13:buildBilanganPrima,14:buildFpbKpk,15:buildPythagoras,16:buildLuasBangun,
+    17:buildVolumeBangun,18:buildPecahan,19:buildPersentase,20:buildDiskonPajak,
+    21:buildBungaSederhana,22:buildFibonacci,23:buildBarisanAritmatika,
+    24:buildAritLanjutan,25:buildBarisanGeometri,26:buildKecepatanJarak,
+    27:buildBMI,28:buildKonversiWaktu,29:buildKonversiData,
+    30:buildBilanganKompleks,31:buildDeterminan3x3,
+  };
+  if(builders[id]) builders[id](body);
+}
+
+// ══════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════
+function fmt(n){
+  if(!isFinite(n))return String(n);
+  if(n===0)return'0';
+  if(Math.abs(n)>=1e13||(Math.abs(n)<1e-7&&n!==0))return n.toExponential(4);
+  if(Number.isInteger(n)&&Math.abs(n)<1e12)return String(n);
+  return parseFloat(n.toPrecision(8)).toString();
+}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
+function isPrime(n){if(n<2)return false;if(n<4)return true;if(n%2===0||n%3===0)return false;for(let i=5;i*i<=n;i+=6)if(n%i===0||n%(i+2)===0)return false;return true;}
+function factorial(n){if(n<=1)return BigInt(1);let r=BigInt(1);for(let i=2;i<=n;i++)r*=BigInt(i);return r;}
+function perm(n,r){if(r>n)return 0;let res=1;for(let i=0;i<r;i++){res*=(n-i);}return res;}
+function comb(n,r){if(r>n)return 0;if(r===0||r===n)return 1;r=Math.min(r,n-r);let res=1;for(let i=0;i<r;i++){res=res*(n-i)/(i+1);}return Math.round(res);}
+
+function makeField(label,placeholder='',type='text'){
+  return `<div class="field"><label>${label}</label><input type="${type}" placeholder="${placeholder}" autocomplete="off"></div>`;
+}
+function makeResult(lines,isErr=false){
+  const c=isErr?'err':'ok';
+  const content=Array.isArray(lines)?lines.map(l=>`<div class="result-line ${l.includes('ERROR')?'err':'ok'}">${l}</div>`).join(''):
+    `<div class="result-line ${isErr?'err':'ok'}">${lines}</div>`;
+  return `<div class="result-box">${content}<button class="copy-btn" id="copy-result-btn">⎘ Copy</button></div>`;
+}
+function setResult(body,lines){
+  let rb=body.querySelector('.result-box');
+  const text=Array.isArray(lines)?lines.join('\n'):lines;
+  if(!rb){body.insertAdjacentHTML('beforeend',makeResult(lines));}
+  else{
+    const c=Array.isArray(lines)?lines.map(l=>`<div class="result-line ${l.includes('ERROR')?'err':'ok'}">${l}</div>`).join(''):
+      `<div class="result-line ${String(lines).includes('ERROR')?'err':'ok'}">${lines}</div>`;
+    rb.innerHTML=c+`<button class="copy-btn" id="copy-result-btn">⎘ Copy</button>`;
+  }
+  rb=body.querySelector('.result-box');
+  if(rb){
+    const cb=rb.querySelector('#copy-result-btn');
+    if(cb)cb.onclick=()=>{navigator.clipboard.writeText(text).then(()=>{cb.textContent='✓ Copied!';setTimeout(()=>cb.textContent='⎘ Copy',1500);}).catch(()=>{});};
+    addHistory(document.getElementById('scene-title').textContent,Array.isArray(lines)?lines[0]:lines);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  SCENE BUILDERS
+// ══════════════════════════════════════════════════════════
+
+// 1. OPERASI DASAR
+function buildOperasiDasar(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Angka 1:','e.g. 42')}
+      ${makeField('Angka 2:','e.g. 7')}
+    </div>
+    <div class="btn-row">
+      ${['+','-','×','÷','%','^'].map(op=>`<button class="calc-btn" data-op="${op}">${op}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const a=parseFloat(i1.value),bv=parseFloat(i2.value);
+      if(isNaN(a)||isNaN(bv))return setResult(b,'ERROR: Input tidak valid');
+      const op=btn.dataset.op;
+      let r;
+      if(op==='+')r=`${a} + ${bv} = ${fmt(a+bv)}`;
+      else if(op==='-')r=`${a} - ${bv} = ${fmt(a-bv)}`;
+      else if(op==='×')r=`${a} × ${bv} = ${fmt(a*bv)}`;
+      else if(op==='÷')r=bv===0?'ERROR: Tidak bisa bagi 0':`${a} ÷ ${bv} = ${fmt(a/bv)}`;
+      else if(op==='%')r=bv===0?'ERROR: Tidak bisa modulo 0':`${a} % ${bv} = ${fmt(a%bv)}`;
+      else r=`${a} ^ ${bv} = ${fmt(Math.pow(a,bv))}`;
+      setResult(b,r);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 2. PANGKAT & AKAR
+function buildPangkatAkar(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Angka (x):','e.g. 25')}
+      ${makeField('n (untuk ⁿ√x dan xⁿ):','e.g. 3')}
+    </div>
+    <div class="btn-row">
+      ${['x²','x³','√x','ⁿ√x','xⁿ'].map(lb=>`<button class="calc-btn" data-op="${lb}">${lb}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const x=parseFloat(i1.value);if(isNaN(x))return setResult(b,'ERROR: Input tidak valid');
+      const op=btn.dataset.op;
+      let r;
+      if(op==='x²')r=`${x}² = ${fmt(x**2)}`;
+      else if(op==='x³')r=`${x}³ = ${fmt(x**3)}`;
+      else if(op==='√x')r=x<0?'ERROR: Akar bilangan negatif':`√${x} = ${fmt(Math.sqrt(x))}`;
+      else if(op==='ⁿ√x'){const n=parseFloat(i2.value);if(isNaN(n)||n===0)return setResult(b,'ERROR: n tidak valid');r=`${n}√${x} = ${fmt(Math.pow(x,1/n))}`;}
+      else{const n=parseFloat(i2.value);if(isNaN(n))return setResult(b,'ERROR: n tidak valid');r=`${x}^${n} = ${fmt(Math.pow(x,n))}`;}
+      setResult(b,r);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 3. TRIGONOMETRI
+function buildTrigonometri(b){
+  b.innerHTML=`
+    <div class="input-group">${makeField('Sudut (derajat):','e.g. 45')}</div>
+    <div class="btn-row">
+      ${['sin','cos','tan','sec','csc','cot'].map(f=>`<button class="calc-btn" data-fn="${f}">${f}</button>`).join('')}
+    </div>`;
+  const i1=b.querySelector('input');
+  b.querySelectorAll('[data-fn]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const deg=parseFloat(i1.value);if(isNaN(deg))return setResult(b,'ERROR: Input tidak valid');
+      const rad=deg*Math.PI/180,fn=btn.dataset.fn;
+      let v;
+      if(fn==='sin')v=Math.sin(rad);
+      else if(fn==='cos')v=Math.cos(rad);
+      else if(fn==='tan')v=Math.tan(rad);
+      else if(fn==='sec'){const c=Math.cos(rad);if(Math.abs(c)<1e-10)return setResult(b,'ERROR: sec undefined');v=1/c;}
+      else if(fn==='csc'){const s=Math.sin(rad);if(Math.abs(s)<1e-10)return setResult(b,'ERROR: csc undefined');v=1/s;}
+      else{const t=Math.tan(rad);if(Math.abs(t)<1e-10)return setResult(b,'ERROR: cot undefined');v=1/t;}
+      setResult(b,`${fn}(${deg}°) = ${v.toFixed(8)}`);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 4. LOGARITMA
+function buildLogaritma(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Angka (x):','e.g. 100')}
+      ${makeField('Base (untuk logₙ):','e.g. 2')}
+    </div>
+    <div class="btn-row">
+      ${['log₁₀','ln','logₙ'].map(f=>`<button class="calc-btn" data-fn="${f}">${f}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-fn]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const x=parseFloat(i1.value);if(isNaN(x)||x<=0)return setResult(b,'ERROR: x harus > 0');
+      const fn=btn.dataset.fn;let r;
+      if(fn==='log₁₀')r=`log₁₀(${x}) = ${Math.log10(x).toFixed(8)}`;
+      else if(fn==='ln')r=`ln(${x}) = ${Math.log(x).toFixed(8)}`;
+      else{const base=parseFloat(i2.value);if(isNaN(base)||base<=0||base===1)return setResult(b,'ERROR: Base harus > 0 dan ≠ 1');r=`log_${base}(${x}) = ${(Math.log(x)/Math.log(base)).toFixed(8)}`;}
+      setResult(b,r);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 5. FAKTORIAL & KOMBINASI
+function buildFaktorial(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('n:','e.g. 10')}
+      ${makeField('r (untuk nPr / nCr):','e.g. 3')}
+    </div>
+    <div class="btn-row">
+      ${['n!','nPr','nCr'].map(f=>`<button class="calc-btn" data-fn="${f}">${f}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-fn]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const n=parseInt(i1.value);if(isNaN(n)||n<0)return setResult(b,'ERROR: n harus ≥ 0');
+      const fn=btn.dataset.fn;
+      if(fn==='n!'){if(n>170)return setResult(b,'ERROR: n maks 170');setResult(b,`${n}! = ${factorial(n).toString()}`);}
+      else{
+        const r=parseInt(i2.value);if(isNaN(r)||r<0||r>n)return setResult(b,'ERROR: 0 ≤ r ≤ n');
+        if(fn==='nPr')setResult(b,`P(${n},${r}) = ${perm(n,r)}`);
+        else setResult(b,`C(${n},${r}) = ${comb(n,r)}`);
+      }
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 6. PERSAMAAN KUADRAT
+function buildPersamaanKuadrat(b){
+  b.innerHTML=`
+    <div class="sec-label">ax² + bx + c = 0</div>
+    <div class="input-group">
+      ${makeField('a (koefisien x²):','e.g. 1')}
+      ${makeField('b (koefisien x):','e.g. -5')}
+      ${makeField('c (konstanta):','e.g. 6')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  const [ia,ib,ic]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const a=parseFloat(ia.value),bv=parseFloat(ib.value),c=parseFloat(ic.value);
+      if([a,bv,c].some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+      if(a===0)return setResult(b,'ERROR: a tidak boleh 0');
+      const D=bv*bv-4*a*c;const lines=[`D = ${fmt(D)}`];
+      if(D>0){const x1=(-bv+Math.sqrt(D))/(2*a),x2=(-bv-Math.sqrt(D))/(2*a);lines.push(`x₁ = ${fmt(x1)}`,`x₂ = ${fmt(x2)}`);}
+      else if(D===0)lines.push(`x₁ = x₂ = ${fmt(-bv/(2*a))}`);
+      else{const re=-bv/(2*a),im=Math.sqrt(-D)/(2*a);lines.push(`x₁ = ${fmt(re)} + ${fmt(im)}i`,`x₂ = ${fmt(re)} - ${fmt(im)}i`);}
+      setResult(b,lines);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 7. KONVERSI SUHU
+function buildKonversiSuhu(b){
+  const units=['°C','°F','K','°Ra','°Re'];
+  const toC={
+    '°C':v=>v,'°F':v=>(v-32)*5/9,'K':v=>v-273.15,
+    '°Ra':v=>(v-491.67)*5/9,'°Re':v=>v*5/4
+  };
+  const fromC={
+    '°C':c=>c,'°F':c=>c*9/5+32,'K':c=>c+273.15,
+    '°Ra':c=>(c+273.15)*9/5,'°Re':c=>c*4/5
+  };
+  buildUnitConverter(b,units,null,null,(val,sel)=>{
+    const c=toC[sel](val);
+    return units.filter(u=>u!==sel).map(u=>`${fmt(val)} ${sel}  =  ${fmt(fromC[u](c))} ${u}`);
+  });
+}
+
+// 8. KONVERSI PANJANG
+function buildKonversiPanjang(b){
+  const units=['mm','cm','dm','m','km','inci','kaki','yard','mil'];
+  const f={mm:.001,cm:.01,dm:.1,m:1,km:1000,inci:.0254,kaki:.3048,yard:.9144,mil:1609.344};
+  buildUnitConverter(b,units,f);
+}
+
+// 9. KONVERSI BERAT
+function buildKonversiBerat(b){
+  const units=['mg','g','kg','ton','lb','oz','stone','karat'];
+  const f={mg:.001,g:1,kg:1000,ton:1e6,lb:453.592,oz:28.3495,stone:6350.29,karat:.2};
+  buildUnitConverter(b,units,f);
+}
+
+// Generic unit converter
+function buildUnitConverter(b,units,factors,names,customFn){
+  let sel=units[0];
+  b.innerHTML=`
+    <div class="input-group">${makeField('Nilai:','e.g. 100')}</div>
+    <div class="sec-label">Pilih satuan asal:</div>
+    <div class="unit-grid" id="unit-btns"></div>
+    <div class="btn-row"><button class="calc-btn primary" id="konversi-btn">KONVERSI</button></div>`;
+  const inp=b.querySelector('input');
+  const ug=b.getElementById?b.getElementById('unit-btns'):b.querySelector('#unit-btns');
+  const renderBtns=()=>{
+    ug.innerHTML=units.map(u=>`<button class="calc-btn ${u===sel?'active':''}" data-unit="${u}">${names?names[u]:u}</button>`).join('');
+    ug.querySelectorAll('[data-unit]').forEach(btn=>btn.onclick=()=>{sel=btn.dataset.unit;renderBtns();});
+  };
+  renderBtns();
+  b.querySelector('#konversi-btn').onclick=()=>{
+    const val=parseFloat(inp.value);if(isNaN(val))return setResult(b,'ERROR: Input tidak valid');
+    let lines;
+    if(customFn){lines=customFn(val,sel);}
+    else{const base=val*factors[sel];lines=units.filter(u=>u!==sel).map(u=>`${fmt(val)} ${sel}  =  ${fmt(base/factors[u])} ${u}`);}
+    setResult(b,lines);
+  };
+}
+
+// 10. SISTEM BILANGAN
+function buildSistemBilangan(b){
+  b.innerHTML=`
+    <div class="input-group">${makeField('Nilai:','e.g. 255')}</div>
+    <div class="btn-row">
+      ${['Dec→Bin','Dec→Oct','Dec→Hex','Bin→Dec','Oct→Dec','Hex→Dec'].map(lb=>`<button class="calc-btn" data-op="${lb}">${lb}</button>`).join('')}
+    </div>`;
+  const i1=b.querySelector('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    const v=i1.value.trim(),op=btn.dataset.op;
+    try{
+      let r;
+      if(op==='Dec→Bin'){const n=parseInt(v);if(isNaN(n))throw 0;r=`${n}(10) = ${n.toString(2)}(2)`;}
+      else if(op==='Dec→Oct'){const n=parseInt(v);if(isNaN(n))throw 0;r=`${n}(10) = ${n.toString(8)}(8)`;}
+      else if(op==='Dec→Hex'){const n=parseInt(v);if(isNaN(n))throw 0;r=`${n}(10) = ${n.toString(16).toUpperCase()}(16)`;}
+      else if(op==='Bin→Dec'){const n=parseInt(v,2);if(isNaN(n))throw 0;r=`${v}(2) = ${n}(10)`;}
+      else if(op==='Oct→Dec'){const n=parseInt(v,8);if(isNaN(n))throw 0;r=`${v}(8) = ${n}(10)`;}
+      else{const n=parseInt(v,16);if(isNaN(n))throw 0;r=`${v.toUpperCase()}(16) = ${n}(10)`;}
+      setResult(b,r);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 11. STATISTIK
+function buildStatistik(b){
+  b.innerHTML=`
+    <div class="input-group"><div class="field"><label>Data (pisahkan spasi):</label><input type="text" placeholder="e.g. 10 20 30 40 50" autocomplete="off"></div></div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const data=b.querySelector('input').value.trim().split(/\s+/).map(Number);
+      if(!data.length||data.some(isNaN))return setResult(b,'ERROR: Data tidak valid');
+      const n=data.length,mean=data.reduce((s,x)=>s+x,0)/n;
+      const sorted=[...data].sort((a,c)=>a-c);
+      const median=n%2?sorted[Math.floor(n/2)]:(sorted[n/2-1]+sorted[n/2])/2;
+      const variance=data.reduce((s,x)=>s+(x-mean)**2,0)/n;
+      const std=Math.sqrt(variance);
+      setResult(b,[
+        `N = ${n}  |  Mean = ${fmt(mean)}`,
+        `Median = ${fmt(median)}  |  Variansi = ${fmt(variance)}`,
+        `Std Dev = ${fmt(std)}  |  Min = ${fmt(Math.min(...data))}  |  Max = ${fmt(Math.max(...data))}`,
+      ]);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 12. MATRIX 2x2
+function buildMatrix(b){
+  b.innerHTML=`
+    <div class="matrix-section">
+      <div class="matrix-block">
+        <div class="matrix-title">Matrix A</div>
+        <div class="matrix-inputs" id="ma">
+          <input placeholder="a₁₁"><input placeholder="a₁₂">
+          <input placeholder="a₂₁"><input placeholder="a₂₂">
+        </div>
+      </div>
+      <div class="matrix-block">
+        <div class="matrix-title">Matrix B</div>
+        <div class="matrix-inputs" id="mb">
+          <input placeholder="b₁₁"><input placeholder="b₁₂">
+          <input placeholder="b₂₁"><input placeholder="b₂₂">
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      ${['A+B','A×B','Det(A)'].map(op=>`<button class="calc-btn" data-op="${op}">${op}</button>`).join('')}
+    </div>`;
+  const ma=b.querySelectorAll('#ma input'),mb=b.querySelectorAll('#mb input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const a=[...ma].map(i=>parseFloat(i.value));
+      const bv=[...mb].map(i=>parseFloat(i.value));
+      const op=btn.dataset.op;
+      if(op==='Det(A)'){if(a.some(isNaN))throw 0;setResult(b,`Det(A) = ${fmt(a[0]*a[3]-a[1]*a[2])}`);}
+      else{
+        if([...a,...bv].some(isNaN))throw 0;
+        if(op==='A+B')setResult(b,['A + B =',`[ ${fmt(a[0]+bv[0])}  ${fmt(a[1]+bv[1])} ]`,`[ ${fmt(a[2]+bv[2])}  ${fmt(a[3]+bv[3])} ]`]);
+        else setResult(b,['A × B =',`[ ${fmt(a[0]*bv[0]+a[1]*bv[2])}  ${fmt(a[0]*bv[1]+a[1]*bv[3])} ]`,`[ ${fmt(a[2]*bv[0]+a[3]*bv[2])}  ${fmt(a[2]*bv[1]+a[3]*bv[3])} ]`]);
+      }
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 13. BILANGAN PRIMA
+function buildBilanganPrima(b){
+  b.innerHTML=`
+    <div class="input-group">${makeField('Angka:','e.g. 97 (untuk cek) atau 100 (untuk list)')}</div>
+    <div class="btn-row">
+      <button class="calc-btn" id="cek-btn">Cek Prima</button>
+      <button class="calc-btn" id="list-btn">List Prima</button>
+    </div>`;
+  const i1=b.querySelector('input');
+  b.querySelector('#cek-btn').onclick=()=>{
+    const n=parseInt(i1.value);if(isNaN(n))return setResult(b,'ERROR: Input tidak valid');
+    setResult(b,isPrime(n)?`${n} adalah bilangan prima ✓`:`${n} bukan bilangan prima`);
+  };
+  b.querySelector('#list-btn').onclick=()=>{
+    const lim=parseInt(i1.value);if(isNaN(lim)||lim<2)return setResult(b,'ERROR: Input tidak valid');
+    if(lim>10000)return setResult(b,'ERROR: Maksimal 10000');
+    const ps=[];for(let i=2;i<=lim;i++)if(isPrime(i))ps.push(i);
+    const shown=ps.slice(0,60).join(', ')+(ps.length>60?'…':'');
+    setResult(b,[`Jumlah prima ≤ ${lim}: ${ps.length}`,`${shown}`]);
+  };
+}
+
+// 14. FPB & KPK
+function buildFpbKpk(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Angka 1:','e.g. 12')}
+      ${makeField('Angka 2:','e.g. 18')}
+    </div>
+    <div class="btn-row">
+      <button class="calc-btn" id="fpb-btn">FPB</button>
+      <button class="calc-btn" id="kpk-btn">KPK</button>
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelector('#fpb-btn').onclick=()=>{
+    const a=parseInt(i1.value),bv=parseInt(i2.value);
+    if(isNaN(a)||isNaN(bv))return setResult(b,'ERROR: Input tidak valid');
+    setResult(b,`FPB(${a}, ${bv}) = ${gcd(a,bv)}`);
+  };
+  b.querySelector('#kpk-btn').onclick=()=>{
+    const a=parseInt(i1.value),bv=parseInt(i2.value);
+    if(isNaN(a)||isNaN(bv))return setResult(b,'ERROR: Input tidak valid');
+    setResult(b,`KPK(${a}, ${bv}) = ${Math.abs(a*bv)/gcd(a,bv)}`);
+  };
+}
+
+// 15. PYTHAGORAS
+function buildPythagoras(b){
+  b.innerHTML=`
+    <div class="sec-label">c² = a² + b²</div>
+    <div class="input-group">
+      ${makeField('Sisi a:','e.g. 3')}
+      ${makeField('Sisi b:','e.g. 4')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">Hitung c</button></div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    const a=parseFloat(i1.value),bv=parseFloat(i2.value);
+    if(isNaN(a)||isNaN(bv))return setResult(b,'ERROR: Input tidak valid');
+    setResult(b,`c = √(${a}² + ${bv}²) = ${fmt(Math.sqrt(a*a+bv*bv))}`);
+  };
+}
+
+// 16. LUAS BANGUN
+function buildLuasBangun(b){
+  const shapes=[
+    {name:'Persegi Pjg',labels:['Panjang:','Lebar:'],fn:v=>`L = ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(v[0]*v[1])} satuan²`,f:'L = p × l',svg:svgRect},
+    {name:'Persegi',labels:['Sisi (s):'],fn:v=>`L = ${fmt(v[0])}² = ${fmt(v[0]**2)} satuan²`,f:'L = s²',svg:svgSquare},
+    {name:'Segitiga',labels:['Alas:','Tinggi:'],fn:v=>`L = ½ × ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(.5*v[0]*v[1])} satuan²`,f:'L = ½ × a × t',svg:svgTriangle},
+    {name:'Lingkaran',labels:['Jari-jari (r):'],fn:v=>`L = π × ${fmt(v[0])}² = ${fmt(Math.PI*v[0]**2)} satuan²`,f:'L = π × r²',svg:svgCircle},
+    {name:'Trapesium',labels:['Alas 1 (a):','Alas 2 (b):','Tinggi:'],fn:v=>`L = ½(${fmt(v[0])}+${fmt(v[1])})×${fmt(v[2])} = ${fmt(.5*(v[0]+v[1])*v[2])} satuan²`,f:'L = ½(a+b)×t',svg:svgTrapezoid},
+    {name:'Jajargenjang',labels:['Alas:','Tinggi:'],fn:v=>`L = ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(v[0]*v[1])} satuan²`,f:'L = a × t',svg:svgParallelogram},
+    {name:'Blh Ketupat',labels:['Diagonal 1:','Diagonal 2:'],fn:v=>`L = ½ × ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(.5*v[0]*v[1])} satuan²`,f:'L = ½ × d1 × d2',svg:svgRhombus},
+    {name:'Layang²',labels:['Diagonal 1:','Diagonal 2:'],fn:v=>`L = ½ × ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(.5*v[0]*v[1])} satuan²`,f:'L = ½ × d1 × d2',svg:svgKite},
+    {name:'Elips',labels:['Sumbu a:','Sumbu b:'],fn:v=>`L = π × ${fmt(v[0])} × ${fmt(v[1])} = ${fmt(Math.PI*v[0]*v[1])} satuan²`,f:'L = π × a × b',svg:svgEllipse},
+    {name:'Segi-6',labels:['Sisi (s):'],fn:v=>`L = (3√3/2) × ${fmt(v[0])}² = ${fmt((3*Math.sqrt(3)/2)*v[0]**2)} satuan²`,f:'L = (3√3/2) × s²',svg:svgHex},
+  ];
+  buildShapeCalc(b,shapes);
+}
+
+// 17. VOLUME BANGUN
+function buildVolumeBangun(b){
+  const shapes=[
+    {name:'Kubus',labels:['Sisi (s):'],fn:v=>`V = ${fmt(v[0])}³ = ${fmt(v[0]**3)} satuan³`,f:'V = s³'},
+    {name:'Balok',labels:['Panjang:','Lebar:','Tinggi:'],fn:v=>`V = ${fmt(v[0])}×${fmt(v[1])}×${fmt(v[2])} = ${fmt(v[0]*v[1]*v[2])} satuan³`,f:'V = p×l×t'},
+    {name:'Tabung',labels:['Jari-jari:','Tinggi:'],fn:v=>`V = π×${fmt(v[0])}²×${fmt(v[1])} = ${fmt(Math.PI*v[0]**2*v[1])} satuan³`,f:'V = π×r²×t'},
+    {name:'Kerucut',labels:['Jari-jari:','Tinggi:'],fn:v=>`V = ⅓π×${fmt(v[0])}²×${fmt(v[1])} = ${fmt(Math.PI*v[0]**2*v[1]/3)} satuan³`,f:'V = ⅓π×r²×t'},
+    {name:'Bola',labels:['Jari-jari:'],fn:v=>`V = (4/3)π×${fmt(v[0])}³ = ${fmt(4/3*Math.PI*v[0]**3)} satuan³`,f:'V = (4/3)π×r³'},
+    {name:'Limas Segi4',labels:['Sisi Alas:','Tinggi:'],fn:v=>`V = ⅓×${fmt(v[0])}²×${fmt(v[1])} = ${fmt(v[0]**2*v[1]/3)} satuan³`,f:'V = ⅓×a²×t'},
+    {name:'Prisma Segi3',labels:['Alas Δ:','Tinggi Δ:','Tinggi Prisma:'],fn:v=>`V = ½×${fmt(v[0])}×${fmt(v[1])}×${fmt(v[2])} = ${fmt(.5*v[0]*v[1]*v[2])} satuan³`,f:'V = ½×a×tΔ×T'},
+    {name:'½ Bola',labels:['Jari-jari:'],fn:v=>`V = (2/3)π×${fmt(v[0])}³ = ${fmt(2/3*Math.PI*v[0]**3)} satuan³`,f:'V = (2/3)π×r³'},
+  ];
+  buildShapeCalc(b,shapes);
+}
+
+function buildShapeCalc(b,shapes){
+  let sel=0;
+  const render=()=>{
+    const s=shapes[sel];
+    b.innerHTML=`
+      <div class="shape-grid">${shapes.map((sh,i)=>`<button class="calc-btn ${i===sel?'active':''}" data-si="${i}">${sh.name}</button>`).join('')}</div>
+      <div class="shape-preview-area">
+        <div class="shape-svg-wrap">${s.svg?s.svg():'<svg width="100" height="80"></svg>'}</div>
+        <div class="shape-formula">
+          <div class="f-label">Rumus:</div>
+          <div class="f-val">${s.f||''}</div>
+        </div>
+      </div>
+      <div class="input-group">${s.labels.map(l=>makeField(l,'e.g. 5')).join('')}</div>
+      <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+    b.querySelectorAll('[data-si]').forEach(btn=>btn.onclick=()=>{sel=parseInt(btn.dataset.si);render();});
+    b.querySelector('#hitung-btn').onclick=()=>{
+      try{
+        const vals=[...b.querySelectorAll('.input-group input')].map(i=>parseFloat(i.value));
+        if(vals.some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+        setResult(b,shapes[sel].fn(vals));
+      }catch{setResult(b,'ERROR: Input tidak valid');}
+    };
+  };
+  render();
+}
+
+// SVG helpers for shape preview
+const C='#50d8ff',C2='#b450ff',S=`stroke="${C}" stroke-width="2" fill="none"`;
+function svgRect(){return`<svg width="120" height="80" viewBox="0 0 120 80"><rect x="15" y="18" width="90" height="44" ${S} rx="2"/><text x="60" y="12" fill="${C2}" font-size="11" text-anchor="middle" font-family="monospace">p</text><text x="112" y="42" fill="${C2}" font-size="11" text-anchor="middle" font-family="monospace">l</text></svg>`;}
+function svgSquare(){return`<svg width="100" height="90" viewBox="0 0 100 90"><rect x="15" y="10" width="70" height="70" ${S} rx="2"/><text x="50" y="6" fill="${C2}" font-size="11" text-anchor="middle" font-family="monospace">s</text></svg>`;}
+function svgTriangle(){return`<svg width="120" height="90" viewBox="0 0 120 90"><polygon points="60,10 10,80 110,80" ${S}/><line x1="60" y1="10" x2="60" y2="80" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><text x="60" y="88" fill="${C2}" font-size="10" text-anchor="middle" font-family="monospace">a</text><text x="68" y="48" fill="${C2}" font-size="10" font-family="monospace">t</text></svg>`;}
+function svgCircle(){return`<svg width="100" height="90" viewBox="0 0 100 90"><circle cx="50" cy="45" r="36" ${S}/><line x1="50" y1="45" x2="86" y2="45" stroke="${C2}" stroke-width="1.5"/><circle cx="50" cy="45" r="3" fill="${C2}"/><text x="68" y="40" fill="${C2}" font-size="11" font-family="monospace">r</text></svg>`;}
+function svgTrapezoid(){return`<svg width="130" height="90" viewBox="0 0 130 90"><polygon points="30,15 100,15 115,75 15,75" ${S}/><line x1="30" y1="15" x2="30" y2="75" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><text x="65" y="10" fill="${C2}" font-size="10" text-anchor="middle" font-family="monospace">b</text><text x="65" y="86" fill="${C2}" font-size="10" text-anchor="middle" font-family="monospace">a</text><text x="18" y="48" fill="${C2}" font-size="10" font-family="monospace">t</text></svg>`;}
+function svgParallelogram(){return`<svg width="130" height="80" viewBox="0 0 130 80"><polygon points="25,15 115,15 105,65 15,65" ${S}/><line x1="25" y1="15" x2="25" y2="65" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><text x="65" y="8" fill="${C2}" font-size="10" text-anchor="middle" font-family="monospace">a</text><text x="12" y="44" fill="${C2}" font-size="10" font-family="monospace">t</text></svg>`;}
+function svgRhombus(){return`<svg width="100" height="90" viewBox="0 0 100 90"><polygon points="50,8 90,45 50,82 10,45" ${S}/><line x1="10" y1="45" x2="90" y2="45" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><line x1="50" y1="8" x2="50" y2="82" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><text x="72" y="41" fill="${C2}" font-size="10" font-family="monospace">d1</text><text x="54" y="18" fill="${C2}" font-size="10" font-family="monospace">d2</text></svg>`;}
+function svgKite(){return`<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="50,8 88,50 50,90 12,50" ${S}/><line x1="12" y1="50" x2="88" y2="50" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/><line x1="50" y1="8" x2="50" y2="90" stroke="${C2}" stroke-width="1" stroke-dasharray="4,3"/></svg>`;}
+function svgEllipse(){return`<svg width="130" height="80" viewBox="0 0 130 80"><ellipse cx="65" cy="40" rx="56" ry="28" ${S}/><line x1="65" y1="40" x2="121" y2="40" stroke="${C2}" stroke-width="1.5"/><line x1="65" y1="40" x2="65" y2="12" stroke="${C2}" stroke-width="1.5"/><circle cx="65" cy="40" r="3" fill="${C2}"/><text x="93" y="36" fill="${C2}" font-size="10" font-family="monospace">a</text><text x="70" y="26" fill="${C2}" font-size="10" font-family="monospace">b</text></svg>`;}
+function svgHex(){
+  const cx=50,cy=48,r=34;const pts=Array.from({length:6},(_,k)=>{const a=Math.PI/180*(60*k-30);return`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;}).join(' ');
+  return`<svg width="100" height="96" viewBox="0 0 100 96"><polygon points="${pts}" ${S}/></svg>`;
+}
+
+// 18. PECAHAN
+function buildPecahan(b){
+  b.innerHTML=`
+    <div class="sec-label">Operasi dua pecahan: (a/b) op (c/d)</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:20px">
+      <div>
+        <div class="field"><label>a (pembilang 1):</label><input placeholder="e.g. 1"></div>
+        <div style="height:1px;background:var(--neon);margin:6px 0;opacity:.5"></div>
+        <div class="field"><label>b (penyebut 1):</label><input placeholder="e.g. 2"></div>
+      </div>
+      <div style="font-size:28px;color:var(--neon);text-align:center;padding:0 8px">op</div>
+      <div>
+        <div class="field"><label>c (pembilang 2):</label><input placeholder="e.g. 1"></div>
+        <div style="height:1px;background:var(--neon);margin:6px 0;opacity:.5"></div>
+        <div class="field"><label>d (penyebut 2):</label><input placeholder="e.g. 3"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      ${['+','-','×','÷'].map(op=>`<button class="calc-btn" data-op="${op}">${op}</button>`).join('')}
+    </div>`;
+  const [ia,ib,ic,id]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const a=parseInt(ia.value),bv=parseInt(ib.value),c=parseInt(ic.value),d=parseInt(id.value);
+      if([a,bv,c,d].some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+      if(bv===0||d===0)return setResult(b,'ERROR: Penyebut tidak boleh 0');
+      const op=btn.dataset.op;
+      let num,den;
+      if(op==='+'){num=a*d+c*bv;den=bv*d;}
+      else if(op==='-'){num=a*d-c*bv;den=bv*d;}
+      else if(op==='×'){num=a*c;den=bv*d;}
+      else{if(c===0)return setResult(b,'ERROR: Tidak bisa bagi 0');num=a*d;den=bv*c;}
+      const g=gcd(Math.abs(num),Math.abs(den));
+      const sign=den<0?-1:1;
+      setResult(b,`${a}/${bv} ${op} ${c}/${d} = ${(sign*num/g)}/${(sign*den/g)}`);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 19. PERSENTASE
+function buildPersentase(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Nilai:','e.g. 200')}
+      ${makeField('Persen (%):','e.g. 15')}
+    </div>
+    <div class="btn-row">
+      ${['Hitung %','Dari Total','Beda %'].map(lb=>`<button class="calc-btn" data-op="${lb}">${lb}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const val=parseFloat(i1.value),pct=parseFloat(i2.value);
+      if(isNaN(val)||isNaN(pct))return setResult(b,'ERROR: Input tidak valid');
+      const op=btn.dataset.op;
+      if(op==='Hitung %')setResult(b,`${pct}% dari ${val} = ${fmt(val*pct/100)}`);
+      else if(op==='Dari Total'){if(pct===0)return setResult(b,'ERROR: Persen tidak boleh 0');setResult(b,`${val} adalah ${pct}% dari ${fmt(val*100/pct)}`);}
+      else setResult(b,`Selisih ${pct}% dari ${val} = ${fmt(val*pct/100)}`);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 20. DISKON & PAJAK
+function buildDiskonPajak(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Harga Awal:','e.g. 250000')}
+      ${makeField('Diskon / Pajak (%):','e.g. 10')}
+    </div>
+    <div class="btn-row">
+      <button class="calc-btn" id="diskon-btn">Hitung Diskon</button>
+      <button class="calc-btn" id="pajak-btn">Hitung Pajak</button>
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelector('#diskon-btn').onclick=()=>{
+    try{const h=parseFloat(i1.value),p=parseFloat(i2.value);if(isNaN(h)||isNaN(p))return setResult(b,'ERROR: Input tidak valid');const d=h*p/100;setResult(b,[`Diskon ${p}% = ${fmt(d)}`,`Harga Setelah Diskon = ${fmt(h-d)}`]);}catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+  b.querySelector('#pajak-btn').onclick=()=>{
+    try{const h=parseFloat(i1.value),p=parseFloat(i2.value);if(isNaN(h)||isNaN(p))return setResult(b,'ERROR: Input tidak valid');const t=h*p/100;setResult(b,[`Pajak ${p}% = ${fmt(t)}`,`Total Setelah Pajak = ${fmt(h+t)}`]);}catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 21. BUNGA SEDERHANA
+function buildBungaSederhana(b){
+  b.innerHTML=`
+    <div class="sec-label">I = P × r × t / 100</div>
+    <div class="input-group">
+      ${makeField('Modal (P):','e.g. 1000000')}
+      ${makeField('Bunga (% per tahun):','e.g. 5')}
+      ${makeField('Waktu (tahun):','e.g. 3')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  const [ip,ir,it]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const p=parseFloat(ip.value),r=parseFloat(ir.value),t=parseFloat(it.value);
+      if([p,r,t].some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+      const bunga=p*r*t/100;
+      setResult(b,[`Modal awal   : ${fmt(p)}`,`Bunga total  : ${fmt(bunga)}`,`Total akhir  : ${fmt(p+bunga)}`]);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 22. FIBONACCI
+function buildFibonacci(b){
+  b.innerHTML=`
+    <div class="input-group">${makeField('Jumlah suku (n):','e.g. 15')}</div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const n=parseInt(b.querySelector('input').value);
+      if(isNaN(n)||n<=0)return setResult(b,'ERROR: n harus > 0');
+      if(n>80)return setResult(b,'ERROR: Maksimal 80 suku');
+      const fib=[0n,1n];for(let i=2;i<n;i++)fib.push(fib[i-1]+fib[i-2]);
+      setResult(b,[`Fibonacci (${n} suku):`,fib.slice(0,n).join(', ')]);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 23. BARISAN ARITMATIKA
+function buildBarisanAritmatika(b){
+  b.innerHTML=`
+    <div class="sec-label">Un = a + (n-1)b  |  Sn = n/2 × (2a + (n-1)b)</div>
+    <div class="input-group">
+      ${makeField('Suku pertama (a):','e.g. 3')}
+      ${makeField('Beda (b):','e.g. 4')}
+      ${makeField('Cari suku ke-n (kosongkan jika tidak perlu):','e.g. 10')}
+      ${makeField('Cari jumlah Sn (kosongkan jika tidak perlu):','e.g. 10')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  const [ia,ib,in_,is_]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const a=parseFloat(ia.value),bv=parseFloat(ib.value);
+      if(isNaN(a)||isNaN(bv))return setResult(b,'ERROR: Input tidak valid');
+      const lines=[];
+      if(in_.value){const n=parseInt(in_.value);if(!isNaN(n)&&n>0)lines.push(`U${n} = ${fmt(a+(n-1)*bv)}`);}
+      if(is_.value){const n=parseInt(is_.value);if(!isNaN(n)&&n>0)lines.push(`S${n} = ${fmt(n*(2*a+(n-1)*bv)/2)}`);}
+      const prev=Array.from({length:10},(_,i)=>fmt(a+i*bv));
+      lines.push(`Preview 10 suku: ${prev.join(', ')}, ...`);
+      setResult(b,lines);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 24. ARITMATIKA LANJUTAN
+function buildAritLanjutan(b){
+  b.innerHTML=`
+    <div class="sec-label">Diketahui dua suku sembarang → temukan a dan b</div>
+    <div class="input-group">
+      ${makeField('Suku ke- (n1):','e.g. 3')}
+      ${makeField('Nilai suku n1:','e.g. 11')}
+      ${makeField('Suku ke- (n2):','e.g. 7')}
+      ${makeField('Nilai suku n2:','e.g. 23')}
+      ${makeField('Target suku ke-n:','e.g. 15')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  const inps=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const n1=parseInt(inps[0].value),u1=parseFloat(inps[1].value);
+      const n2=parseInt(inps[2].value),u2=parseFloat(inps[3].value);
+      const nt=parseInt(inps[4].value);
+      if([n1,u1,n2,u2,nt].some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+      if(n1===n2)return setResult(b,'ERROR: n1 harus ≠ n2');
+      const bv=(u1-u2)/(n1-n2),a=u1-(n1-1)*bv;
+      const ut=a+(nt-1)*bv,st=nt*(2*a+(nt-1)*bv)/2;
+      setResult(b,[`b = ${fmt(bv)}  |  a = ${fmt(a)}`,`U${nt} = ${fmt(ut)}`,`S${nt} = ${fmt(st)}`]);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 25. BARISAN GEOMETRI
+function buildBarisanGeometri(b){
+  b.innerHTML=`
+    <div class="sec-label">Un = a × rⁿ⁻¹  |  Sn = a(1-rⁿ)/(1-r)</div>
+    <div class="input-group">
+      ${makeField('Suku pertama (a):','e.g. 2')}
+      ${makeField('Rasio (r):','e.g. 3')}
+      ${makeField('Cari suku ke-n (kosongkan jika tidak perlu):','e.g. 6')}
+      ${makeField('Cari jumlah Sn (kosongkan jika tidak perlu):','e.g. 6')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG</button></div>`;
+  const [ia,ir,in_,is_]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const a=parseFloat(ia.value),r=parseFloat(ir.value);
+      if(isNaN(a)||isNaN(r))return setResult(b,'ERROR: Input tidak valid');
+      const lines=[];
+      if(in_.value){const n=parseInt(in_.value);if(!isNaN(n)&&n>0){if(n>300)return setResult(b,'ERROR: n maks 300');lines.push(`U${n} = ${fmt(a*Math.pow(r,n-1))}`);}}
+      if(is_.value){const n=parseInt(is_.value);if(!isNaN(n)&&n>0){if(n>300)return setResult(b,'ERROR: n maks 300');const sn=r===1?a*n:a*(1-Math.pow(r,n))/(1-r);lines.push(`S${n} = ${fmt(sn)}`);}}
+      const prev=Array.from({length:8},(_,i)=>fmt(a*Math.pow(r,i)));
+      lines.push(`Preview 8 suku: ${prev.join(', ')}, ...`);
+      setResult(b,lines);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 26. KECEPATAN & JARAK
+function buildKecepatanJarak(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Nilai 1 (jarak s / kecepatan v):','e.g. 120')}
+      ${makeField('Nilai 2 (waktu t):','e.g. 2')}
+    </div>
+    <div class="btn-row">
+      ${['Kecepatan (s÷t)','Jarak (v×t)','Waktu (s÷v)'].map(lb=>`<button class="calc-btn" data-op="${lb}">${lb}</button>`).join('')}
+    </div>`;
+  const [i1,i2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const v1=parseFloat(i1.value),v2=parseFloat(i2.value);
+      if(isNaN(v1)||isNaN(v2))return setResult(b,'ERROR: Input tidak valid');
+      const op=btn.dataset.op;
+      if(op.includes('Kecepatan')){if(v2===0)return setResult(b,'ERROR: Waktu ≠ 0');setResult(b,`v = s/t = ${fmt(v1)}/${fmt(v2)} = ${fmt(v1/v2)} km/jam`);}
+      else if(op.includes('Jarak'))setResult(b,`s = v×t = ${fmt(v1)}×${fmt(v2)} = ${fmt(v1*v2)} km`);
+      else{if(v2===0)return setResult(b,'ERROR: Kecepatan ≠ 0');setResult(b,`t = s/v = ${fmt(v1)}/${fmt(v2)} = ${fmt(v1/v2)} jam`);}
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 27. BMI
+function buildBMI(b){
+  b.innerHTML=`
+    <div class="input-group">
+      ${makeField('Berat badan (kg):','e.g. 65')}
+      ${makeField('Tinggi badan (cm):','e.g. 170')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG BMI</button></div>`;
+  const [ib_,it]=b.querySelectorAll('input');
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const bb=parseFloat(ib_.value),tb=parseFloat(it.value)/100;
+      if(isNaN(bb)||isNaN(tb)||tb<=0)return setResult(b,'ERROR: Input tidak valid');
+      const bmi=bb/(tb*tb);
+      const kat=bmi<18.5?'🔵 Kurus (Underweight)':bmi<25?'🟢 Normal (Healthy)':bmi<30?'🟡 Gemuk (Overweight)':'🔴 Obesitas';
+      setResult(b,[`BMI = ${bmi.toFixed(2)}`,`Kategori: ${kat}`]);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// 28. KONVERSI WAKTU
+function buildKonversiWaktu(b){
+  const units=['ms','detik','menit','jam','hari','minggu','bulan','tahun'];
+  const f={ms:.001,detik:1,menit:60,jam:3600,hari:86400,minggu:604800,bulan:2592000,tahun:31536000};
+  buildUnitConverter(b,units,f);
+}
+
+// 29. KONVERSI DATA
+function buildKonversiData(b){
+  const units=['bit','byte','KB','MB','GB','TB','PB'];
+  const f={bit:1,byte:8,KB:8192,MB:8388608,GB:8589934592,TB:8796093022208,PB:9007199254740992};
+  buildUnitConverter(b,units,f);
+}
+
+// 30. BILANGAN KOMPLEKS
+function buildBilanganKompleks(b){
+  b.innerHTML=`
+    <div class="sec-label">Z1 = a1 + b1·i  |  Z2 = a2 + b2·i</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div class="input-group">
+        ${makeField('a1 (Re Z1):','e.g. 3')}
+        ${makeField('b1 (Im Z1):','e.g. 4')}
+      </div>
+      <div class="input-group">
+        ${makeField('a2 (Re Z2):','e.g. 1')}
+        ${makeField('b2 (Im Z2):','e.g. -2')}
+      </div>
+    </div>
+    <div class="btn-row">
+      ${['Tambah (+)','Kurang (-)','Kali (×)'].map(op=>`<button class="calc-btn" data-op="${op}">${op}</button>`).join('')}
+    </div>`;
+  const [ia1,ib1,ia2,ib2]=b.querySelectorAll('input');
+  b.querySelectorAll('[data-op]').forEach(btn=>btn.onclick=()=>{
+    try{
+      const a1=parseFloat(ia1.value),b1v=parseFloat(ib1.value);
+      const a2=parseFloat(ia2.value),b2v=parseFloat(ib2.value);
+      if([a1,b1v,a2,b2v].some(isNaN))return setResult(b,'ERROR: Input tidak valid');
+      const sign=v=>v>=0?`+${v}`:String(v);
+      const op=btn.dataset.op;
+      let re,im;
+      if(op.includes('+')){ re=a1+a2; im=b1v+b2v; }
+      else if(op.includes('-')){ re=a1-a2; im=b1v-b2v; }
+      else { re=a1*a2-b1v*b2v; im=a1*b2v+b1v*a2; }
+      setResult(b,`Hasil = ${fmt(re)} ${im>=0?'+':''} ${fmt(im)}i`);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  });
+}
+
+// 31. DETERMINAN 3x3
+function buildDeterminan3x3(b){
+  b.innerHTML=`
+    <div class="sec-label">Ekspansi kofaktor baris pertama</div>
+    <div style="display:inline-grid;grid-template-columns:repeat(3,90px);gap:8px;margin-bottom:20px">
+      ${Array.from({length:9},(_,i)=>`<input class="matrix-inp" style="background:#120828;border:1.5px solid var(--mid);color:var(--white);font-family:'Share Tech Mono',monospace;font-size:15px;padding:8px;border-radius:7px;outline:none;text-align:center" placeholder="a${Math.floor(i/3)+1}${i%3+1}" autocomplete="off">`).join('')}
+    </div>
+    <div class="btn-row"><button class="calc-btn primary" id="hitung-btn">HITUNG DET</button></div>`;
+  b.querySelector('#hitung-btn').onclick=()=>{
+    try{
+      const vals=[...b.querySelectorAll('.matrix-inp')].map(i=>parseFloat(i.value));
+      if(vals.some(isNaN))return setResult(b,'ERROR: Isi semua 9 input');
+      const m=[[vals[0],vals[1],vals[2]],[vals[3],vals[4],vals[5]],[vals[6],vals[7],vals[8]]];
+      const det=m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+               -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+               +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+      setResult(b,`Det(A) = ${fmt(det)}`);
+    }catch{setResult(b,'ERROR: Input tidak valid');}
+  };
+}
+
+// ══════════════════════════════════════════════════════════
+//  CLOSE OVERLAY ON OUTSIDE CLICK
+// ══════════════════════════════════════════════════════════
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('active');});
+});
+</script>
+</body>
+</html>
