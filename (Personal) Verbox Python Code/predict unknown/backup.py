@@ -22,20 +22,7 @@ DNG, DNG_H = "#ef4444", "#dc2626"
 
 class DMP:
     """5-depth N-gram predictor with variable backoff, falling back to
-    global map frequency when no context match exists. Layered on top:
-    Laplace-smoothed base probabilities (anti-overconfidence), a
-    rounds-since-last-seen gap tracker, short-term hot-zone momentum, and
-    a cooldown/re-occurrence boost for maps that are statistically "due"."""
-
-    # --- tunable constants for the recency/hot-zone system ---
-    HOT_WINDOW = 12        # how many recent rounds count as "short-term"
-    HOT_MIN_HITS = 2       # occurrences within the window to count as "hot"
-    HOT_BOOST_STEP = 0.15  # extra multiplier per hit beyond the threshold
-    HOT_BOOST_CAP = 1.75   # ceiling on the hot-zone multiplier
-    COOLDOWN_MIN = 3       # gap range (rounds since last seen) that counts
-    COOLDOWN_MAX = 7       # as "due for a re-occurrence"
-    COOLDOWN_BOOST = 1.25  # multiplier applied when a map is "due" and not hot
-
+    global map frequency when no context match exists."""
     def __init__(self, db=DB, md=5):
         self.db, self.hist, self.md = db, [], md
         self.ng = defaultdict(lambda: defaultdict(int))
@@ -81,91 +68,26 @@ class DMP:
         if not seq: return None, ""
         for k in range(min(len(seq), self.md), 0, -1):
             ctx = tuple(seq[-k:])
-            cand = self.ng.get(ctx)
-            if cand:
-                n = sum(cand.values())
+            if ctx in self.ng and self.ng[ctx]:
                 c_str = " -> ".join(m.capitalize() for m in ctx)
-                return cand, f"Context ({k}-round, n={n}): [{c_str}]"
-        if self.gc:
-            return self.gc, f"Fallback: Global map frequency (n={sum(self.gc.values())})"
+                return self.ng[ctx], f"Context ({k}-round): [{c_str}]"
+        if self.gc: return self.gc, "Fallback: Global map frequency"
         return None, ""
-
-    def _gaps(self):
-        """rounds_since_last_seen for every map: 0 = appeared last round,
-        None = never appeared anywhere in the recorded history."""
-        seq = [e["bot"] for e in self._valid()]
-        n = len(seq)
-        gaps = {}
-        for m in CS_MP:
-            gap = None
-            for i in range(n - 1, -1, -1):
-                if seq[i] == m:
-                    gap = n - 1 - i
-                    break
-            gaps[m] = gap
-        return gaps
-
-    def _hot_zone_multipliers(self):
-        """Short-term momentum: a map that's shown up repeatedly in the
-        last HOT_WINDOW rounds (back-to-back repeats, gap-1/gap-2
-        ping-pongs) gets boosted rather than treated as overdue for a break."""
-        seq = [e["bot"] for e in self._valid()]
-        window = seq[-self.HOT_WINDOW:]
-        mult = {}
-        for m in CS_MP:
-            hits = window.count(m)
-            mult[m] = min(1.0 + self.HOT_BOOST_STEP * (hits - 1), self.HOT_BOOST_CAP) \
-                if hits >= self.HOT_MIN_HITS else 1.0
-        return mult
-
-    def _recency_multipliers(self, gaps, hot_mult):
-        """Cooldown / re-occurrence boost for maps that are NOT currently
-        hot: a map that hasn't shown up in COOLDOWN_MIN-COOLDOWN_MAX rounds
-        is statistically "due" to reappear."""
-        mult = {}
-        for m in CS_MP:
-            if hot_mult.get(m, 1.0) > 1.0:
-                mult[m] = 1.0  # already boosted by hot-zone, don't stack both
-                continue
-            gap = gaps.get(m)
-            mult[m] = self.COOLDOWN_BOOST if gap is not None and \
-                self.COOLDOWN_MIN <= gap <= self.COOLDOWN_MAX else 1.0
-        return mult
 
     def predict(self, top_n=TOPN):
         c, msg = self._counts()
         if not c: return [], "Not enough data yet - log a few rounds to see predictions."
-
         banned = []
         if self.hist and isinstance(self.hist[-1], dict):
             last_guess = self.hist[-1].get("guess")
             banned = last_guess if isinstance(last_guess, list) else [last_guess]
-        pool = [m for m in CS_MP if m not in banned]
-        if not pool: return [], "No valid prediction available."
-
-        # 1) Base_N_Gram_Probability, Laplace/add-1 smoothed over the FULL
-        #    16-map pool (not just maps this context happened to observe).
-        #    A context with n=1 can no longer spike to a fake 100%; a
-        #    well-supported context (large n) barely notices the +1.
-        base_raw = {m: c.get(m, 0) + 1 for m in pool}
-        base_tot = sum(base_raw.values())
-        base_prob = {m: v / base_tot for m, v in base_raw.items()}
-
-        # 2) Gap tracker + 3) hot-zone momentum + 4) cooldown boost
-        gaps = self._gaps()
-        hot_mult = self._hot_zone_multipliers()
-        rec_mult = self._recency_multipliers(gaps, hot_mult)
-
-        # 5) Hybrid score, then normalize back to a clean 100%
-        scored = {m: base_prob[m] * hot_mult.get(m, 1.0) * rec_mult.get(m, 1.0) for m in pool}
-        tot = sum(scored.values())
-        if tot <= 0: return [], "No valid prediction available."
-        probs = sorted(((m, v / tot * 100) for m, v in scored.items()), key=lambda x: -x[1])
-
-        if banned:
-            excluded = ", ".join(x.capitalize() for x in banned if x)
-            msg = f"{msg} | Excluded (last guess): {excluded}"
-
+        valid_c = {m: v for m, v in c.items() if m not in banned}
+        if not valid_c:
+            valid_c = {m: v for m, v in self.gc.items() if m not in banned}
+            msg = "Fallback: Global frequency (banned map active)"
+        if not valid_c: return [], "No valid prediction available."
+        tot = sum(valid_c.values())
+        probs = sorted(((m, v / tot * 100) for m, v in valid_c.items()), key=lambda x: -x[1])
         return probs[:top_n], msg
 
 

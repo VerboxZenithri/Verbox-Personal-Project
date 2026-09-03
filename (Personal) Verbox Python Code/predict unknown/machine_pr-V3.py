@@ -3,6 +3,8 @@ import json, os
 from collections import defaultdict
 from tkinter import messagebox
 import customtkinter as ctk
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 CS_MP = ["ancient","agency","assault","cache","canals","cobblestone","dust2","inferno",
          "italy","militia","mirage","nuke","office","overpass","train","vertigo"]
@@ -21,20 +23,7 @@ DNG, DNG_H = "#ef4444", "#dc2626"
 
 
 class DMP:
-    """5-depth N-gram predictor with variable backoff, falling back to
-    global map frequency when no context match exists. Layered on top:
-    Laplace-smoothed base probabilities (anti-overconfidence), a
-    rounds-since-last-seen gap tracker, short-term hot-zone momentum, and
-    a cooldown/re-occurrence boost for maps that are statistically "due"."""
-
-    # --- tunable constants for the recency/hot-zone system ---
-    HOT_WINDOW = 12        # how many recent rounds count as "short-term"
-    HOT_MIN_HITS = 2       # occurrences within the window to count as "hot"
-    HOT_BOOST_STEP = 0.15  # extra multiplier per hit beyond the threshold
-    HOT_BOOST_CAP = 1.75   # ceiling on the hot-zone multiplier
-    COOLDOWN_MIN = 3       # gap range (rounds since last seen) that counts
-    COOLDOWN_MAX = 7       # as "due for a re-occurrence"
-    COOLDOWN_BOOST = 1.25  # multiplier applied when a map is "due" and not hot
+    MOMENTUM_BOOST = 5
 
     def __init__(self, db=DB, md=5):
         self.db, self.hist, self.md = db, [], md
@@ -52,8 +41,6 @@ class DMP:
         with open(self.db, "w", encoding="utf-8") as f: json.dump(self.hist, f, indent=4)
 
     def _valid(self):
-        """Filters out malformed/corrupted entries so a hand-edited or
-        partially-written JSON file can't crash training or prediction."""
         return [e for e in self.hist if isinstance(e, dict) and "bot" in e]
 
     def train(self):
@@ -90,48 +77,6 @@ class DMP:
             return self.gc, f"Fallback: Global map frequency (n={sum(self.gc.values())})"
         return None, ""
 
-    def _gaps(self):
-        """rounds_since_last_seen for every map: 0 = appeared last round,
-        None = never appeared anywhere in the recorded history."""
-        seq = [e["bot"] for e in self._valid()]
-        n = len(seq)
-        gaps = {}
-        for m in CS_MP:
-            gap = None
-            for i in range(n - 1, -1, -1):
-                if seq[i] == m:
-                    gap = n - 1 - i
-                    break
-            gaps[m] = gap
-        return gaps
-
-    def _hot_zone_multipliers(self):
-        """Short-term momentum: a map that's shown up repeatedly in the
-        last HOT_WINDOW rounds (back-to-back repeats, gap-1/gap-2
-        ping-pongs) gets boosted rather than treated as overdue for a break."""
-        seq = [e["bot"] for e in self._valid()]
-        window = seq[-self.HOT_WINDOW:]
-        mult = {}
-        for m in CS_MP:
-            hits = window.count(m)
-            mult[m] = min(1.0 + self.HOT_BOOST_STEP * (hits - 1), self.HOT_BOOST_CAP) \
-                if hits >= self.HOT_MIN_HITS else 1.0
-        return mult
-
-    def _recency_multipliers(self, gaps, hot_mult):
-        """Cooldown / re-occurrence boost for maps that are NOT currently
-        hot: a map that hasn't shown up in COOLDOWN_MIN-COOLDOWN_MAX rounds
-        is statistically "due" to reappear."""
-        mult = {}
-        for m in CS_MP:
-            if hot_mult.get(m, 1.0) > 1.0:
-                mult[m] = 1.0  # already boosted by hot-zone, don't stack both
-                continue
-            gap = gaps.get(m)
-            mult[m] = self.COOLDOWN_BOOST if gap is not None and \
-                self.COOLDOWN_MIN <= gap <= self.COOLDOWN_MAX else 1.0
-        return mult
-
     def predict(self, top_n=TOPN):
         c, msg = self._counts()
         if not c: return [], "Not enough data yet - log a few rounds to see predictions."
@@ -142,38 +87,80 @@ class DMP:
             banned = last_guess if isinstance(last_guess, list) else [last_guess]
         pool = [m for m in CS_MP if m not in banned]
         if not pool: return [], "No valid prediction available."
-
-        # 1) Base_N_Gram_Probability, Laplace/add-1 smoothed over the FULL
-        #    16-map pool (not just maps this context happened to observe).
-        #    A context with n=1 can no longer spike to a fake 100%; a
-        #    well-supported context (large n) barely notices the +1.
         base_raw = {m: c.get(m, 0) + 1 for m in pool}
-        base_tot = sum(base_raw.values())
-        base_prob = {m: v / base_tot for m, v in base_raw.items()}
+        seq = [e["bot"] for e in self._valid()]
+        momentum_hit = len(seq) >= 2 and seq[-1] == seq[-2] and seq[-1] in base_raw
+        if momentum_hit:
+            base_raw[seq[-1]] += self.MOMENTUM_BOOST
 
-        # 2) Gap tracker + 3) hot-zone momentum + 4) cooldown boost
-        gaps = self._gaps()
-        hot_mult = self._hot_zone_multipliers()
-        rec_mult = self._recency_multipliers(gaps, hot_mult)
-
-        # 5) Hybrid score, then normalize back to a clean 100%
-        scored = {m: base_prob[m] * hot_mult.get(m, 1.0) * rec_mult.get(m, 1.0) for m in pool}
-        tot = sum(scored.values())
+        tot = sum(base_raw.values())
         if tot <= 0: return [], "No valid prediction available."
-        probs = sorted(((m, v / tot * 100) for m, v in scored.items()), key=lambda x: -x[1])
+        probs = sorted(((m, v / tot * 100) for m, v in base_raw.items()), key=lambda x: -x[1])
 
+        if momentum_hit:
+            msg = f"{msg}  [momentum: last 2 rounds matched]"
         if banned:
             excluded = ", ".join(x.capitalize() for x in banned if x)
             msg = f"{msg} | Excluded (last guess): {excluded}"
 
         return probs[:top_n], msg
 
+    # ---------- analytics / backtesting ----------
+    def _predict_causal(self, seq_so_far, ng, gc, boost):
+        c = None
+        for k in range(min(len(seq_so_far), self.md), 0, -1):
+            ctx = tuple(seq_so_far[-k:])
+            cand = ng.get(ctx)
+            if cand:
+                c = cand; break
+        if c is None:
+            c = gc
+        if not c:
+            return None, False
+        base = {m: c.get(m, 0) + 1 for m in CS_MP}
+        momentum = len(seq_so_far) >= 2 and seq_so_far[-1] == seq_so_far[-2]
+        if momentum:
+            base[seq_so_far[-1]] += boost
+        return max(base.items(), key=lambda x: x[1])[0], momentum
+
+    def backtest_accuracy(self, boost=None):
+        """Causal walk-forward backtest over the full logged history: at
+        each round, predicts using ONLY the n-grams built from EARLIER
+        rounds, then checks that prediction against what the bot actually
+        rolled. Returns [{"round": i, "hit": 0/1, "momentum": bool}, ...]."""
+        boost = self.MOMENTUM_BOOST if boost is None else boost
+        seq = [e["bot"] for e in self._valid()]
+        ng = defaultdict(lambda: defaultdict(int))
+        gc = defaultdict(int)
+        out = []
+        for i, actual in enumerate(seq):
+            if i > 0:
+                pred, momentum = self._predict_causal(seq[:i], ng, gc, boost)
+                if pred is not None:
+                    out.append({"round": i + 1, "hit": int(pred == actual), "momentum": momentum})
+            gc[actual] += 1
+            for k in range(1, self.md + 1):
+                if i - k >= 0:
+                    ctx = tuple(seq[i - k:i])
+                    ng[ctx][actual] += 1
+        return out
+
+    def rolling_curve(self, window=50):
+        data = self.backtest_accuracy()
+        xs, ys, buf = [], [], []
+        for r in data:
+            buf.append(r["hit"])
+            if len(buf) > window:
+                buf.pop(0)
+            xs.append(r["round"]); ys.append(sum(buf) / len(buf) * 100)
+        return xs, ys, data
+
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode("dark"); ctk.set_default_color_theme("dark-blue")
-        self.title("DisGO Map Predictor"); self.geometry("1150x760"); self.minsize(980, 680)
+        self.title("DisGO Map Predictor V3"); self.geometry("1150x760"); self.minsize(980, 680)
         self.configure(fg_color=BG)
 
         self.dmp = DMP()
@@ -182,6 +169,7 @@ class App(ctk.CTk):
         self.mbtn, self.prows = {}, []
         self.log_lines = []
         self.log_win = None
+        self.analytics_win = None
 
         self._build(); self._refresh()
 
@@ -285,6 +273,10 @@ class App(ctk.CTk):
                       fg_color=ACC, hover_color=ACC_H, text_color=TXT,
                       font=ctk.CTkFont(size=12, weight="bold"),
                       command=self._open_log_viewer).pack(side="right")
+        ctk.CTkButton(lh, text="📊 Analytics", corner_radius=10, height=30, width=110,
+                      fg_color=BTN, hover_color=BTN_H, text_color=TXT,
+                      font=ctk.CTkFont(size=12, weight="bold"),
+                      command=self._open_analytics).pack(side="right", padx=(0, 8))
         self.log_box = ctk.CTkTextbox(lp, fg_color=PANEL2, text_color=DIM, corner_radius=10,
                                        font=ctk.CTkFont(size=12), state="disabled",
                                        scrollbar_button_color=ACC, scrollbar_button_hover_color=ACC_H)
@@ -346,7 +338,7 @@ class App(ctk.CTk):
         self.dmp.add(gv, bv)
         gd = " + ".join(g.capitalize() for g in self.g_sel) if isinstance(gv, list) else gv.capitalize()
         self._log(f"Round #{len(self.dmp.hist)} logged - Guess: {gd}  ->  Bot: {bv.capitalize()}")
-        self._clear(); self._preds(); self._rounds()
+        self._clear(); self._preds(); self._rounds(); self._refresh_analytics()
 
     def _undo(self):
         if not self.dmp.hist:
@@ -360,7 +352,7 @@ class App(ctk.CTk):
                                     "This cannot be undone.", parent=self):
             return
         self.dmp.undo(); self._log(f"Undo - removed last round (Guess: {g}, Bot: {bo})")
-        self._clear(); self._preds(); self._rounds()
+        self._clear(); self._preds(); self._rounds(); self._refresh_analytics()
 
     # ---------- refresh ----------
     def _refresh(self):
@@ -433,6 +425,99 @@ class App(ctk.CTk):
         self.log_viewer_box.insert("end", "\n".join(f"- {m}" for m in self.log_lines))
         self.log_viewer_box.see("end")
         self.log_viewer_box.configure(state="disabled")
+
+    # ---------- analytics dashboard ----------
+    def _open_analytics(self):
+        if self.analytics_win is not None and self.analytics_win.winfo_exists():
+            self.analytics_win.lift(); self.analytics_win.focus()
+            self._refresh_analytics()
+            return
+
+        win = ctk.CTkToplevel(self)
+        win.title("Analytics Dashboard")
+        win.geometry("780x700")
+        win.minsize(620, 520)
+        win.configure(fg_color=BG)
+        win.transient(self)
+        self.analytics_win = win
+
+        hdr = ctk.CTkFrame(win, fg_color=PANEL, corner_radius=0, height=64)
+        hdr.pack(fill="x"); hdr.pack_propagate(False)
+        ctk.CTkLabel(hdr, text="Analytics Dashboard", font=ctk.CTkFont(size=18, weight="bold"),
+                     text_color=TXT).pack(side="left", padx=20)
+        ctk.CTkButton(hdr, text="Refresh", corner_radius=10, height=30, width=90,
+                      fg_color=ACC, hover_color=ACC_H, text_color=TXT,
+                      font=ctk.CTkFont(size=12, weight="bold"),
+                      command=self._refresh_analytics).pack(side="right", padx=20)
+
+        self.analytics_summary = ctk.CTkLabel(win, text="", font=ctk.CTkFont(size=13), text_color=DIM,
+                                               justify="left", anchor="w")
+        self.analytics_summary.pack(fill="x", padx=20, pady=(14, 6))
+
+        chart_holder = ctk.CTkFrame(win, fg_color=PANEL2, corner_radius=12)
+        chart_holder.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+
+        fig = Figure(figsize=(7, 5.6), dpi=100)
+        fig.patch.set_facecolor(PANEL2)
+        self.analytics_fig = fig
+        self.analytics_ax_acc = fig.add_subplot(2, 1, 1)
+        self.analytics_ax_freq = fig.add_subplot(2, 1, 2)
+        fig.subplots_adjust(hspace=0.5, left=0.09, right=0.97, top=0.93, bottom=0.2)
+
+        self.analytics_canvas = FigureCanvasTkAgg(fig, master=chart_holder)
+        self.analytics_canvas.get_tk_widget().pack(fill="both", expand=True, padx=10, pady=10)
+
+        ctk.CTkButton(win, text="Close", corner_radius=10, height=40, fg_color=ACC, hover_color=ACC_H,
+                      text_color=TXT, font=ctk.CTkFont(size=13, weight="bold"),
+                      command=win.destroy).pack(fill="x", padx=20, pady=(0, 20))
+
+        self._refresh_analytics()
+
+    def _refresh_analytics(self):
+        if self.analytics_win is None or not self.analytics_win.winfo_exists():
+            return
+
+        data = self.dmp.backtest_accuracy()
+        baseline = 100 / len(CS_MP)
+        if not data:
+            self.analytics_summary.configure(
+                text=f"Not enough logged rounds yet to backtest - random baseline is {baseline:.1f}%.")
+        else:
+            overall_acc = sum(r["hit"] for r in data) / len(data) * 100
+            mom_rows = [r for r in data if r["momentum"]]
+            mom_acc = (sum(r["hit"] for r in mom_rows) / len(mom_rows) * 100) if mom_rows else 0.0
+            self.analytics_summary.configure(text=(
+                f"Overall backtested accuracy: {overall_acc:.1f}%   |   Random baseline: {baseline:.1f}%\n"
+                f"Momentum boost fired {len(mom_rows)} time(s) so far   |   "
+                f"Accuracy on those rounds: {mom_acc:.1f}%"
+            ))
+
+        xs, ys, _ = self.dmp.rolling_curve(window=50)
+
+        ax = self.analytics_ax_acc
+        ax.clear(); ax.set_facecolor(PANEL2)
+        if xs:
+            ax.plot(xs, ys, color=ACC, linewidth=1.6, label="Rolling accuracy (50-round window)")
+        ax.axhline(baseline, color=DIM, linestyle="--", linewidth=1, label=f"Random baseline ({baseline:.1f}%)")
+        ax.set_title("Prediction accuracy over time", color=TXT, fontsize=11, loc="left")
+        ax.tick_params(colors=DIM, labelsize=8)
+        for spine in ax.spines.values(): spine.set_color(PANEL)
+        ax.legend(facecolor=PANEL2, edgecolor=PANEL, labelcolor=TXT, fontsize=8, loc="upper left")
+
+        freq = defaultdict(int)
+        for e in self.dmp._valid():
+            freq[e["bot"]] += 1
+        names = sorted(CS_MP, key=lambda m: -freq.get(m, 0))
+        vals = [freq.get(m, 0) for m in names]
+
+        ax2 = self.analytics_ax_freq
+        ax2.clear(); ax2.set_facecolor(PANEL2)
+        ax2.bar([m.capitalize() for m in names], vals, color=ACC)
+        ax2.set_title("Map frequency (all logged rounds)", color=TXT, fontsize=11, loc="left")
+        ax2.tick_params(colors=DIM, labelsize=7, rotation=60)
+        for spine in ax2.spines.values(): spine.set_color(PANEL)
+
+        self.analytics_canvas.draw()
 
 
 if __name__ == "__main__":

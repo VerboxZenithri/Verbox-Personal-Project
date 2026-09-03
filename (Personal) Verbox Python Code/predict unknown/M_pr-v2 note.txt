@@ -1,0 +1,31 @@
+5-depth N-gram predictor with variable backoff, falling back to
+global map frequency when no context match exists. Layered on top:
+Laplace-smoothed base probabilities (anti-overconfidence) plus a
+streak-momentum boost for a map that just repeated twice in a row.
+
+Note: the previous hot-zone (rolling-window) and cooldown
+(due-after-N-rounds) multipliers were removed after backtesting
+against 833 logged rounds showed they performed identically to plain
+smoothing (7.33% top-1 accuracy either way) - i.e. they weren't
+hurting, but weren't helping either, and the cooldown half was built
+on a "due after 3-7 rounds" theory that the same data disproved
+(repeats land in that window ~23% of the time vs a ~25% random
+baseline). The momentum boost below is the one piece that showed a
+real, statistically-grounded lift (8.05% vs 7.33%, p ~= 0.02 on the
+underlying streak-continuation rate) - see machine_pr changelog.
+
+Bonus added to a map's smoothed count when it just repeated twice in
+a row (i.e. the last two logged rounds were the same map). Backtested:
+boosts of 5 and 8 tied for best accuracy, so 5 is used to stay
+conservative - this is grounded in ~55 observed "pair" events so far,
+re-tune as more data comes in.
+
+ 1) Base N-gram probability, Laplace/add-1 smoothed over the FULL
+    16-map pool (not just maps this context happened to observe).
+    A context with n=1 can no longer spike to a fake 100%; a
+    well-supported context (large n) barely notices the +1.
+
+ 2) Streak-momentum boost: the last two ACTUAL bot rolls were the
+    same map, so give that map's raw count a bump. This is the one
+    signal that backtested as a genuine, statistically-grounded
+    improvement (see class docstring).
