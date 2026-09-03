@@ -1,0 +1,502 @@
+[
+    {
+        "nama": "Barreta 92",
+        "stok": 37,
+        "harga": 813450
+    },
+    {
+        "nama": "Colt 1911",
+        "stok": 402,
+        "harga": 1050000
+    },
+    {
+        "nama": "AK-47",
+        "stok": 199,
+        "harga": 5263025
+    },
+    {
+        "nama": "BMG-50",
+        "stok": 706,
+        "harga": 97500000
+    },
+    {
+        "nama": "Glock",
+        "stok": 12,
+        "harga": 297431
+    },
+    {
+        "nama": "Illegal M4",
+        "stok": 45,
+        "harga": 14400000
+    },
+    {
+        "nama": "RPG-7",
+        "stok": 116,
+        "harga": 129950000
+    },
+    {
+        "nama": "Desert Eagle",
+        "stok": 43,
+        "harga": 15000000
+    },
+    {
+        "nama": "Uzi",
+        "stok": 196,
+        "harga": 2700000
+    },
+    {
+        "nama": "FN SCAR",
+        "stok": 34,
+        "harga": 12000000
+    },
+    {
+        "nama": "M16A4",
+        "stok": 216,
+        "harga": 1898681
+    },
+    {
+        "nama": "Dragunov SVD",
+        "stok": 28,
+        "harga": 22000000
+    },
+    {
+        "nama": "MP5",
+        "stok": 218,
+        "harga": 3000000
+    },
+    {
+        "nama": "C4 Explosive",
+        "stok": 14,
+        "harga": 45000000
+    },
+    {
+        "nama": "Molotov",
+        "stok": 54,
+        "harga": 191520
+    },
+    {
+        "nama": "Claymore Mine",
+        "stok": 50,
+        "harga": 18900000
+    },
+    {
+        "nama": "Smoke Grenade",
+        "stok": 141,
+        "harga": 125000
+    },
+    {
+        "nama": "HE+Shrapnel Granade",
+        "stok": 14,
+        "harga": 885000
+    },
+    {
+        "nama": "HE Granade",
+        "stok": 173,
+        "harga": 352000
+    },
+    {
+        "nama": "Shrapnel Granade",
+        "stok": 89,
+        "harga": 420000
+    },
+    {
+        "nama": "Flashbang",
+        "stok": 185,
+        "harga": 205000
+    },
+    {
+        "nama": "Kevlar Vest",
+        "stok": 50,
+        "harga": 921149
+    },
+    {
+        "nama": "Tactical Helmet",
+        "stok": 333,
+        "harga": 650000
+    },
+    {
+        "nama": "Night Vision Goggles",
+        "stok": 414,
+        "harga": 45238366
+    },
+    {
+        "nama": "Tactical Shield",
+        "stok": 132,
+        "harga": 5550000
+    },
+    {
+        "nama": "Thick Plastic Shield",
+        "stok": 30,
+        "harga": 1938000
+    },
+    {
+        "nama": "EMP Device",
+        "stok": 75,
+        "harga": 32588551
+    },
+    {
+        "nama": "Signal Jammer",
+        "stok": 199,
+        "harga": 22000000
+    },
+    {
+        "nama": "Hacking Laptop",
+        "stok": 55,
+        "harga": 14307500
+    },
+    {
+        "nama": "Tracking Beacon",
+        "stok": 322,
+        "harga": 4500000
+    },
+    {
+        "nama": "Spy Drone",
+        "stok": 245,
+        "harga": 9500000
+    },
+    {
+        "nama": "Silencer (Universal)",
+        "stok": 135,
+        "harga": 650000
+    },
+    {
+        "nama": "Tactical Boots",
+        "stok": 99,
+        "harga": 250000
+    },
+    {
+        "nama": "Survival Kit",
+        "stok": 208,
+        "harga": 375000
+    },
+    {
+        "nama": "First Aid Kit",
+        "stok": 90,
+        "harga": 385000
+    },
+    {
+        "nama": "MedKit",
+        "stok": 677,
+        "harga": 257000
+    },
+    {
+        "nama": "Bandage",
+        "stok": 263,
+        "harga": 105000
+    },
+    {
+        "nama": "Adrenaline Syringe",
+        "stok": 28,
+        "harga": 556605
+    },
+    {
+        "nama": "Katana",
+        "stok": 208,
+        "harga": 1267200
+    },
+    {
+        "nama": "Long Sword",
+        "stok": 627,
+        "harga": 450000
+    },
+    {
+        "nama": "Machete",
+        "stok": 138,
+        "harga": 375000
+    },
+    {
+        "nama": "Combat Knife",
+        "stok": 931,
+        "harga": 121611
+    },
+    {
+        "nama": "Vector SMG",
+        "stok": 88,
+        "harga": 4200000
+    },
+    {
+        "nama": "AA-12 Shotgun",
+        "stok": 42,
+        "harga": 8500000
+    },
+    {
+        "nama": "P90",
+        "stok": 120,
+        "harga": 3800000
+    },
+    {
+        "nama": "L96A1 Sniper",
+        "stok": 25,
+        "harga": 28500000
+    },
+    {
+        "nama": "Minigun M134",
+        "stok": 1225,
+        "harga": 150000000
+    },
+    {
+        "nama": "Flamethrower",
+        "stok": 1009,
+        "harga": 18500000
+    },
+    {
+        "nama": "Crossbow",
+        "stok": 65,
+        "harga": 1200000
+    },
+    {
+        "nama": "Ballistic Shield",
+        "stok": 40,
+        "harga": 7200000
+    },
+    {
+        "nama": "Gas Mask",
+        "stok": 150,
+        "harga": 450000
+    },
+    {
+        "nama": "Hazmat Suit",
+        "stok": 20,
+        "harga": 3500000
+    },
+    {
+        "nama": "Thermal Scope",
+        "stok": 45,
+        "harga": 12500000
+    },
+    {
+        "nama": "Laser Sight",
+        "stok": 200,
+        "harga": 850000
+    },
+    {
+        "nama": "Extended Mag",
+        "stok": 300,
+        "harga": 450000
+    },
+    {
+        "nama": "Armor Piercing Ammo",
+        "stok": 1000,
+        "harga": 55000
+    },
+    {
+        "nama": "Incendiary Rounds",
+        "stok": 500,
+        "harga": 75000
+    },
+    {
+        "nama": "Parachute",
+        "stok": 55,
+        "harga": 1200000
+    },
+    {
+        "nama": "Grappling Hook",
+        "stok": 38,
+        "harga": 2100000
+    },
+    {
+        "nama": "Lockpick Set",
+        "stok": 500,
+        "harga": 150000
+    },
+    {
+        "nama": "Keycard Scrambler",
+        "stok": 22,
+        "harga": 18000000
+    },
+    {
+        "nama": "Hard Drive Eraser",
+        "stok": 637,
+        "harga": 5500000
+    },
+    {
+        "nama": "Encrypted Phone",
+        "stok": 90,
+        "harga": 3200000
+    },
+    {
+        "nama": "Hidden Camera",
+        "stok": 110,
+        "harga": 850000
+    },
+    {
+        "nama": "Bio-Scanner",
+        "stok": 28,
+        "harga": 14500000
+    },
+    {
+        "nama": "Exoskeleton Frame",
+        "stok": 8,
+        "harga": 250000000
+    },
+    {
+        "nama": "Railgun Prototype",
+        "stok": 2,
+        "harga": 850000000
+    },
+    {
+        "nama": "Cryo Grenade",
+        "stok": 30,
+        "harga": 2500000
+    },
+    {
+        "nama": "Gas Grenade",
+        "stok": 140,
+        "harga": 650000
+    },
+    {
+        "nama": "Remote Detonator",
+        "stok": 85,
+        "harga": 1500000
+    },
+    {
+        "nama": "Briefcase Nuke",
+        "stok": 1,
+        "harga": 5000000000
+    },
+    {
+        "nama": "Stun Gun",
+        "stok": 160,
+        "harga": 550000
+    },
+    {
+        "nama": "Brass Knuckles",
+        "stok": 23,
+        "harga": 85000
+    },
+    {
+        "nama": "Throwing Knives",
+        "stok": 400,
+        "harga": 120000
+    },
+    {
+        "nama": "Tomahawk",
+        "stok": 75,
+        "harga": 650000
+    },
+    {
+        "nama": "Explosive Arrows",
+        "stok": 120,
+        "harga": 450000
+    },
+    {
+        "nama": "Military Radio",
+        "stok": 65,
+        "harga": 1100000
+    },
+    {
+        "nama": "Satellite Phone",
+        "stok": 1235,
+        "harga": 8500000
+    },
+    {
+        "nama": "Portable Server",
+        "stok": 12,
+        "harga": 45000000
+    },
+    {
+        "nama": "Neural Interface",
+        "stok": 5,
+        "harga": 125000000
+    },
+    {
+        "nama": "Combat Stimulant",
+        "stok": 230,
+        "harga": 950000
+    },
+    {
+        "nama": "Anti-Rad Pills",
+        "stok": 450,
+        "harga": 225000
+    },
+    {
+        "nama": "Fake ID Card",
+        "stok": 100,
+        "harga": 5000000
+    },
+    {
+        "nama": "Money Counterfeit Kit",
+        "stok": 723,
+        "harga": 65000000
+    },
+    {
+        "nama": "Body Bag",
+        "stok": 1000,
+        "harga": 25000
+    },
+    {
+        "nama": "Zip Ties (100pcs)",
+        "stok": 1515,
+        "harga": 50000
+    },
+    {
+        "nama": "Tactical Flashlight",
+        "stok": 320,
+        "harga": 185000
+    },
+    {
+        "nama": "Underbarrel Launcher",
+        "stok": 33,
+        "harga": 9500000
+    },
+    {
+        "nama": "Karambit",
+        "stok": 145,
+        "harga": 850000
+    },
+    {
+        "nama": "Butterfly Knife",
+        "stok": 120,
+        "harga": 750000
+    },
+    {
+        "nama": "Riot Gear Set",
+        "stok": 342,
+        "harga": 15500000
+    },
+    {
+        "nama": "Heavy Plate Carrier",
+        "stok": 45,
+        "harga": 8500000
+    },
+    {
+        "nama": "Drone Controller",
+        "stok": 55,
+        "harga": 3500000
+    },
+    {
+        "nama": "Signal Booster",
+        "stok": 30,
+        "harga": 7200000
+    },
+    {
+        "nama": "Poison Vial",
+        "stok": 80,
+        "harga": 1500000
+    },
+    {
+        "nama": "Acid Spray",
+        "stok": 1195,
+        "harga": 2100000
+    },
+    {
+        "nama": "Tear Gas Canister",
+        "stok": 1278,
+        "harga": 300000
+    },
+    {
+        "nama": "Wire Cutter",
+        "stok": 1356,
+        "harga": 125000
+    },
+    {
+        "nama": "Crowbar",
+        "stok": 300,
+        "harga": 95000
+    },
+    {
+        "nama": "Handcuffs",
+        "stok": 180,
+        "harga": 250000
+    }
+]

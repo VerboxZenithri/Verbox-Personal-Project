@@ -1,0 +1,100 @@
+[2025-10-13 12:01:18] beli 1x EMP Device - Total: $85,500,000
+[2025-10-13 12:04:29] jual 24x Dragunov SVD - Total: $264,000,000
+[2025-10-13 12:06:21] jual 5x BMG-50 - Total: $243,750,000
+[2025-10-13 21:11:32] beli 12x Molotov - Total: $1,800,000
+[2025-10-13 21:26:53] jual 2x HE Granade - Total: $400,000
+[2025-10-13 21:34:23] beli 1x Thick Plastic Shield - Total: $1,700,000
+[2025-10-14 18:20:32] beli 12x Glock - Total: $5,760,000
+    └─ Harga Glock naik 3% jadi $494,400
+[2025-10-14 18:22:02] jual 10x Glock - Total: $2,472,000
+    └─ Harga Glock turun 6% jadi $464,736
+[2025-10-14 18:23:45] beli 120x Molotov - Total: $20,520,000
+    └─ Harga Molotov naik 12% jadi $191,520
+[2025-10-14 18:36:30] jual 2x AK-47 - Total: $4,500,000
+    └─ Harga AK-47 turun 5% jadi $4,275,000
+[2025-10-14 18:37:10] beli 4x Tactical Shield - Total: $20,000,000
+    └─ Harga Tactical Shield naik 11% jadi $5,550,000
+[2025-10-14 18:38:48] beli 7x AK-47 - Total: $29,925,000
+    └─ Harga AK-47 naik 3% jadi $4,403,250
+[2025-10-14 19:02:50] jual 75x AK-47 - Total: $165,121,875
+    └─ Harga AK-47 turun 17% jadi $3,654,697
+[2025-10-14 19:03:10] beli 1x AK-47 - Total: $3,654,697
+    └─ Harga AK-47 naik 13% jadi $4,129,807
+[2025-10-14 21:12:18] beli 3x M16A4 - Total: $21,000,000
+    └─ Harga M16A4 naik 3% jadi $7,210,000
+[2025-10-14 21:18:42] beli 7x M16A4 - Total: $50,470,000
+    └─ Harga M16A4 naik 14% jadi $8,219,400
+[2025-10-14 21:21:24] jual 31x M16A4 - Total: $127,400,700
+    └─ Harga M16A4 turun 12% jadi $7,233,072
+[2025-10-14 21:39:41] jual 50x Combat Knife - Total: $3,000,000
+    └─ Harga Combat Knife turun 17% jadi $99,600
+[2025-10-14 21:40:48] beli 25x Combat Knife - Total: $2,490,000
+    └─ Harga Combat Knife naik 11% jadi $110,556
+[2025-10-14 21:43:21] beli 25x Combat Knife - Total: $2,763,900
+    └─ Harga Combat Knife naik 10% jadi $121,611
+[2025-10-14 21:44:41] beli 2x Uzi - Total: $5,000,000
+    └─ Harga Uzi naik 20% jadi $3,000,000
+[2025-10-14 21:46:30] jual 8x Uzi - Total: $12,000,000
+    └─ Harga Uzi turun 10% jadi $2,700,000
+[2025-10-14 21:49:38] beli 21x Shrapnel Granade - Total: $7,350,000
+    └─ Harga Shrapnel Granade naik 20% jadi $420,000
+[2025-10-14 22:33:01] jual 10x Barreta 92 - Total: $4,675,000
+    └─ Harga Barreta 92 turun 13% jadi $813,450
+[2025-10-16 20:51:07] beli 4x Kevlar Vest - Total: $3,600,000
+    └─ Harga Kevlar Vest naik 15% jadi $1,034,999
+[2025-10-16 22:00:52] jual 9x Kevlar Vest - Total: $4,657,491
+    └─ Harga Kevlar Vest turun 11% jadi $921,149
+[2025-10-16 22:02:53] beli 5x Illegal M4 - Total: $60,000,000
+    └─ Harga Illegal M4 naik 20% jadi $14,400,000!!!
+[2025-10-17 09:49:45] beli 1x AK-47 - Total: $4,129,807
+    └─ Harga AK-47 naik 8% jadi $4,460,191!!!
+[2025-10-19 12:58:11] beli 7x Hacking Laptop - Total: $87,500,000
+    └─ Harga Hacking Laptop naik 18% jadi $14,750,000!!!
+[2025-10-19 12:58:37] jual 20x Hacking Laptop - Total: $147,500,000
+    └─ Harga Hacking Laptop turun 3% jadi $14,307,500!!!
+[2025-10-20 14:45:28] jual 2x Adrenaline Syringe - Total: $475,000
+    └─ Harga Adrenaline Syringe turun 37% jadi $299,250!!!
+[2025-10-20 14:45:51] beli 14x Adrenaline Syringe - Total: $4,189,500
+    └─ Harga Adrenaline Syringe naik 86% jadi $556,605!!!
+[2025-10-27 22:32:32] beli 105x AK-47 - Total: $468,320,055
+    └─ Harga AK-47 naik 18% jadi $5,263,025!!!
+[2025-10-27 22:53:36] jual 204x EMP Device - Total: $8,721,000,000
+    └─ Harga EMP Device turun 94% jadi $5,130,000!!!
+[2025-10-27 22:55:36] beli 2x EMP Device - Total: $10,260,000
+    └─ Harga EMP Device naik 33% jadi $6,822,900!!!
+[2025-10-27 22:55:48] beli 12x EMP Device - Total: $81,874,800
+    └─ Harga EMP Device naik 78% jadi $12,144,762!!!
+[2025-10-27 22:56:45] beli 35x EMP Device - Total: $425,066,670
+    └─ Harga EMP Device naik 28% jadi $15,545,295!!!
+[2025-10-27 22:57:08] beli 2x EMP Device - Total: $31,090,590
+    └─ Harga EMP Device naik 12% jadi $17,410,730!!!
+[2025-10-27 22:57:19] beli 7x EMP Device - Total: $121,875,110
+    └─ Harga EMP Device naik 47% jadi $25,593,773!!!
+[2025-10-27 22:58:39] beli 75x Katana - Total: $45,000,000
+    └─ Harga Katana naik 65% jadi $990,000!!!
+[2025-10-27 22:58:49] beli 17x EMP Device - Total: $435,094,141
+    └─ Harga EMP Device naik 7% jadi $27,385,337!!!
+[2025-10-27 22:59:15] beli 59x EMP Device - Total: $1,615,734,883
+    └─ Harga EMP Device naik 19% jadi $32,588,551!!!
+[2026-01-20 07:11:47] beli 42x Night Vision Goggles - Total: $1,470,000,000
+    └─ Harga Night Vision Goggles naik 63% jadi $57,049,999!!!
+[2026-01-20 07:12:21] jual 20x Glock - Total: $4,647,360
+    └─ Harga Glock turun 36% jadi $297,431!!!
+[2026-01-30 15:06:19] beli 80x M16A4 - Total: $578,645,760
+    └─ Harga M16A4 naik 25% jadi $9,041,340!!!
+[2026-02-03 11:11:55] jual 100x Night Vision Goggles - Total: $2,852,499,900
+    └─ Harga Night Vision Goggles turun 20% jadi $45,639,999!!!
+[2026-02-03 11:12:32] beli 125x Night Vision Goggles - Total: $5,704,999,875
+    └─ Harga Night Vision Goggles naik 68% jadi $76,675,198!!!
+[2026-02-03 11:12:51] jual 250x Night Vision Goggles - Total: $9,584,399,750
+    └─ Harga Night Vision Goggles turun 41% jadi $45,238,366!!!
+[2026-02-04 14:35:52] beli 1x Katana - Total: $990,000
+    └─ Harga Katana naik 28% jadi $1,267,200!!!
+[2026-02-06 22:38:16] beli 100x Long Sword - Total: $45,000,000
+    └─ Harga Long Sword naik 47% jadi $661,500!!!
+[2026-02-06 22:39:10] jual 200x Long Sword - Total: $66,150,000
+    └─ Harga Long Sword turun 30% jadi $463,049!!!
+[2026-02-06 23:53:42] beli 14x Signal Jammer - Total: $308,000,000
+    └─ Harga Signal Jammer naik 26% jadi $27,720,000!!!
+[2026-02-06 23:54:20] jual 23x C4 Explosive - Total: $517,500,000
+    └─ Harga C4 Explosive turun 13% jadi $39,150,000!!!

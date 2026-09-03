@@ -1,0 +1,176 @@
+[2025-10-27 20:06:21] ZenZenithri Clan menjual 1,840 unit MedKit total: $236,440,000
+[2025-10-27 20:07:36] Volhaven Shadow menjual 170 unit MP5 total: $255,000,000
+[2025-10-27 20:09:17] D.E.V. Clan menjual 998 unit Flashbang total: $102,295,000
+[2025-10-27 20:10:07] NetBurners menjual 1,535 unit Hacking Laptop total: $10,981,006,250
+[2025-10-27 20:10:32] The Dark Army menjual 123 unit Spy Drone total: $584,250,000
+[2025-10-27 20:46:48] ZenZenithri Clan menjual 1,515 unit Signal Jammer total: $16,665,000,000
+[2025-10-27 21:33:36] WorldGlitch 0x6C1 menjual 417 unit Combat Knife total: $25,355,685
+[2025-10-27 21:34:01] D.E.A.D, menjual 1,030 unit HE+Shrapnel Granade total: $455,775,000
+[2025-10-27 21:34:51] D.E.A.D, membeli 1,820 unit MedKit total: $467,740,000
+[2025-10-27 21:35:16] NWO menjual 871 unit Night Vision Goggles total: $15,242,500,000
+[2025-10-27 21:40:06] Slum Snake menjual 797 unit Machete total: $149,437,500
+[2025-10-27 21:40:31] Ghost Syndicate menjual 1,696 unit Long Sword total: $381,600,000
+[2025-10-27 21:57:21] BackdoorBreacher Community membeli 1,176 unit Survival Kit total: $441,000,000
+[2025-10-27 22:10:27] Ishima menjual 232 unit First Aid Kit total: $44,660,000
+[2025-10-27 22:11:17] The Convenant menjual 1,152 unit Katana total: $345,600,000
+[2025-10-27 22:21:52] Ghost Syndicate menjual 749 unit Spy Drone total: $3,557,750,000
+[2025-10-27 22:22:17] D.E.V. Clan menjual 1,063 unit Hacking Laptop total: $7,604,436,250
+[2025-10-27 22:29:11] BitRunners menjual 656 unit Glock total: $152,433,408
+[2025-10-27 22:30:01] Volhaven Shadow menjual 1,170 unit Hacking Laptop total: $8,369,887,500
+[2025-10-27 22:30:26] Ishima membeli 1,138 unit Hacking Laptop total: $16,281,935,000
+[2025-10-27 22:31:17] ZenZenithri Clan menjual 928 unit Glock total: $215,637,504
+[2025-10-27 22:31:42] The Dark Army menjual 989 unit Smoke Grenade total: $61,812,500
+[2025-10-27 22:32:07] Shadow Clan menjual 346 unit Hacking Laptop total: $2,475,197,500
+[2025-10-27 22:32:32] Ghost Syndicate menjual 1,072 unit Tactical Shield total: $2,974,800,000
+[2025-10-27 22:33:22] The Convenant menjual 1,175 unit Survival Kit total: $220,312,500
+[2025-10-27 22:49:18] Black Cross Organisation menjual 171 unit Glock total: $39,734,928
+[2025-10-27 22:49:43] NetBurners membeli 133 unit Glock total: $61,809,888
+[2025-10-27 22:50:08] The Convenant membeli 519 unit Glock total: $241,197,984
+[2025-10-27 22:50:33] Black Lotus membeli 348 unit Glock total: $161,728,128
+[2025-10-27 22:50:58] D.E.A.D, menjual 1,232 unit Long Sword total: $277,200,000
+[2025-10-27 22:51:23] Volhaven Shadow menjual 710 unit Silencer (Universal) total: $230,750,000
+[2025-10-27 22:51:48] Black Lotus membeli 199 unit Glock total: $92,482,464
+[2025-10-27 22:52:13] WorldGlitch 0x6C1 menjual 1,235 unit Tactical Helmet total: $401,375,000
+[2025-10-27 22:52:38] Shadow Clan membeli 463 unit Glock total: $215,172,768
+[2025-10-27 22:53:03] NetBurners menjual 832 unit Barreta 92 total: $338,395,200
+[2025-10-27 22:53:28] Black Cross Organisation membeli 427 unit Barreta 92 total: $347,343,150
+[2025-10-27 22:53:53] Slum Snake membeli 706 unit Molotov total: $135,213,120
+[2025-10-27 22:54:18] NWO membeli 671 unit Molotov total: $128,509,920
+[2025-10-27 22:54:43] The Convenant menjual 658 unit Tactical Boots total: $82,250,000
+[2025-10-27 22:55:08] The Dark Army menjual 1,111 unit Claymore Mine total: $10,498,950,000
+[2025-10-27 22:55:33] NiteSec menjual 321 unit Glock total: $74,590,128
+[2025-10-27 22:55:58] WorldGlitch 0x6C1 membeli 265 unit Barreta 92 total: $215,564,250
+[2025-10-27 22:56:23] NWO menjual 287 unit Tactical Shield total: $796,425,000
+[2025-10-27 22:56:48] Ishima menjual 999 unit Signal Jammer total: $10,989,000,000
+[2025-10-27 22:57:13] Black Cross Organisation menjual 1,245 unit Long Sword total: $280,125,000
+[2025-10-27 22:57:38] Shadow Clan membeli 1,136 unit Molotov total: $217,566,720
+[2025-10-27 22:58:03] NWO membeli 1,249 unit Tactical Helmet total: $811,850,000
+[2025-10-27 22:58:28] NWO membeli 970 unit Claymore Mine total: $18,333,000,000
+[2025-10-27 22:58:53] BitRunners menjual 1,072 unit Colt 1911 total: $562,800,000
+[2025-10-27 22:59:18] D.E.A.D, membeli 873 unit Colt 1911 total: $916,650,000
+[2025-10-27 22:59:43] The Ruler membeli 417 unit Glock total: $193,794,912
+[2025-10-28 13:58:30] Black Lotus membeli 841 unit Smoke Grenade total: $105,125,000
+[2026-01-20 07:10:45] NWO menjual 201 unit Hacking Laptop total: $1,437,903,750
+[2026-01-20 07:11:10] BitRunners menjual 1,246 unit Dragunov SVD total: $13,706,000,000
+[2026-01-20 07:11:35] BitRunners membeli 348 unit Dragunov SVD total: $7,656,000,000
+[2026-01-20 07:12:00] NetBurners membeli 1,069 unit HE+Shrapnel Granade total: $946,065,000
+[2026-01-20 07:12:25] ZenZenithri Clan membeli 233 unit Barreta 92 total: $189,533,850
+[2026-01-29 11:44:07] Red Clover Clan menjual 654 unit Bandage total: $34,335,000
+[2026-01-29 11:44:32] The Ruler membeli 382 unit Dragunov SVD total: $8,404,000,000
+[2026-01-29 11:44:57] WorldGlitch 0x6C1 menjual 815 unit Night Vision Goggles total: $23,247,874,185
+[2026-01-29 11:45:22] BackdoorBreacher Community membeli 311 unit Glock total: $92,501,041
+[2026-01-29 11:45:47] WorldGlitch 0x6C1 membeli 1,235 unit Tactical Shield total: $6,854,250,000
+[2026-01-29 11:52:01] Ghost Syndicate menjual 1,074 unit Uzi total: $1,449,900,000
+[2026-01-30 15:06:04] ZenZenithri Clan menjual 1,135 unit Tracking Beacon total: $2,553,750,000
+[2026-01-30 15:06:29] Shadow Clan menjual 614 unit Flashbang total: $62,935,000
+[2026-01-30 15:06:54] FuncReactor menjual 483 unit Long Sword total: $108,675,000
+[2026-01-30 15:07:19] BackdoorBreacher Community menjual 818 unit Desert Eagle total: $6,135,000,000
+[2026-01-30 15:25:27] Shadow Clan menjual 257 unit Silencer (Universal) total: $83,525,000
+[2026-01-30 15:25:52] The Dark Army menjual 1,132 unit AK-47 total: $2,978,871,584
+[2026-01-30 15:26:17] ZenZenithri Clan membeli 182 unit Colt 1911 total: $191,100,000
+[2026-01-30 15:26:42] D.E.A.D, menjual 534 unit Long Sword total: $120,150,000
+[2026-01-30 15:27:07] NiteSec membeli 932 unit AK-47 total: $4,905,139,300
+[2026-01-30 15:27:32] Slum Snake membeli 855 unit Desert Eagle total: $12,825,000,000
+[2026-01-30 15:27:57] NWO membeli 621 unit Uzi total: $1,676,700,000
+[2026-01-30 15:28:22] The Convenant membeli 323 unit Uzi total: $872,100,000
+[2026-02-03 10:09:59] NetBurners membeli 71 unit Colt 1911 total: $74,550,000
+[2026-02-03 10:10:19] NiteSec membeli 902 unit Night Vision Goggles total: $51,459,099,098
+[2026-02-03 10:32:44] The Dark Army membeli 274 unit Dragunov SVD total: $6,028,000,000
+[2026-02-03 10:33:04] BitRunners membeli 1,068 unit Signal Jammer total: $23,496,000,000
+[2026-02-03 10:33:24] NetBurners menjual 307 unit Tactical Helmet total: $99,775,000
+[2026-02-03 10:33:44] D.E.V. Clan menjual 684 unit Bandage total: $35,910,000
+[2026-02-03 11:08:13] The Convenant menjual 1,031 unit Glock total: $153,325,165
+[2026-02-03 11:08:33] FuncReactor membeli 734 unit Glock total: $218,314,354
+[2026-02-03 11:08:53] The Ruler membeli 537 unit Flashbang total: $110,085,000
+[2026-02-03 11:09:13] NetBurners membeli 58 unit AK-47 total: $305,255,450
+[2026-02-03 11:09:33] Black Cross Organisation membeli 479 unit Hacking Laptop total: $6,853,292,500
+[2026-02-03 11:09:53] WorldGlitch 0x6C1 menjual 799 unit Claymore Mine total: $7,550,550,000
+[2026-02-03 11:10:13] The Ruler membeli 189 unit Glock total: $56,214,459
+[2026-02-03 11:10:33] The Convenant membeli 381 unit Claymore Mine total: $7,200,900,000
+[2026-02-03 11:10:53] WorldGlitch 0x6C1 membeli 770 unit Hacking Laptop total: $11,016,775,000
+[2026-02-03 11:11:13] NetBurners membeli 444 unit Claymore Mine total: $8,391,600,000
+[2026-02-03 11:11:33] The Convenant menjual 271 unit Molotov total: $25,950,960
+[2026-02-03 11:11:53] Ghost Syndicate menjual 672 unit BMG-50 total: $32,760,000,000
+[2026-02-03 11:12:13] BitRunners membeli 833 unit Tracking Beacon total: $3,748,500,000
+[2026-02-03 11:12:33] Black Cross Organisation membeli 830 unit Spy Drone total: $7,885,000,000
+[2026-02-03 11:12:53] NWO membeli 887 unit Silencer (Universal) total: $576,550,000
+[2026-02-03 11:13:13] Slum Snake membeli 549 unit BMG-50 total: $53,527,500,000
+[2026-02-03 11:13:33] WorldGlitch 0x6C1 menjual 968 unit Combat Knife total: $58,859,240
+[2026-02-03 11:21:23] Black Lotus membeli 1,070 unit Survival Kit total: $401,250,000
+[2026-02-03 11:21:55] BitRunners menjual 246 unit AK-47 total: $647,351,952
+[2026-02-03 12:05:49] NiteSec menjual 560 unit BMG-50 total: $27,300,000,000
+[2026-02-04 14:35:39] WorldGlitch 0x6C1 membeli 454 unit BMG-50 total: $44,265,000,000
+[2026-02-04 14:35:59] The Ruler membeli 169 unit AK-47 total: $889,451,225
+[2026-02-04 14:36:19] The Ruler membeli 317 unit Molotov total: $60,711,840
+[2026-02-04 14:36:39] Red Clover Clan menjual 1,170 unit RPG-7 total: $76,020,750,000
+[2026-02-04 14:36:59] NWO menjual 270 unit Claymore Mine total: $2,551,500,000
+[2026-02-04 14:37:19] The Dark Army membeli 762 unit RPG-7 total: $99,021,900,000
+[2026-02-04 14:37:39] Ishima membeli 1,179 unit First Aid Kit total: $453,915,000
+[2026-02-05 11:36:13] WorldGlitch 0x6C1 membeli 960 unit MedKit total: $246,720,000
+[2026-02-05 11:36:33] BackdoorBreacher Community menjual 79 unit Survival Kit total: $14,812,500
+[2026-02-05 11:36:53] WorldGlitch 0x6C1 membeli 734 unit Tactical Boots total: $183,500,000
+[2026-02-05 11:37:13] D.E.A.D, menjual 225 unit Adrenaline Syringe total: $62,617,950
+[2026-02-05 13:19:13] Volhaven Shadow membeli 893 unit MedKit total: $229,501,000
+[2026-02-05 13:19:33] Red Clover Clan menjual 413 unit HE Granade total: $72,688,000
+[2026-02-06 22:37:30] Ghost Syndicate membeli 831 unit Bandage total: $87,255,000
+[2026-02-06 22:37:50] Volhaven Shadow membeli 270 unit RPG-7 total: $35,086,500,000
+[2026-02-06 22:38:10] NetBurners membeli 967 unit Bandage total: $101,535,000
+[2026-02-06 22:38:30] D.E.V. Clan membeli 150 unit AK-47 total: $789,453,750
+[2026-02-06 22:38:50] Red Clover Clan membeli 316 unit Claymore Mine total: $5,972,400,000
+[2026-02-06 22:39:10] The Dark Army menjual 613 unit BMG-50 total: $29,883,750,000
+[2026-02-06 22:48:05] Black Cross Organisation menjual 948 unit HE+Shrapnel Granade total: $419,490,000
+[2026-02-06 22:48:25] NWO membeli 1,097 unit Bandage total: $115,185,000
+[2026-02-06 23:13:45] Ishima menjual 778 unit Uzi total: $1,050,300,000
+[2026-02-06 23:53:46] BitRunners menjual 1,116 unit EMP Device total: $18,184,410,900
+[2026-02-06 23:54:06] The Convenant menjual 796 unit Machete total: $149,250,000
+[2026-02-06 23:54:26] Black Cross Organisation membeli 580 unit BMG-50 total: $56,550,000,000
+[2026-02-08 21:23:48] Ghost Syndicate membeli 995 unit EMP Device total: $32,425,608,245
+[2026-02-08 21:24:08] The Convenant menjual 770 unit Long Sword total: $178,273,480
+[2026-02-08 22:14:23] Ishima membeli 781 unit Uzi total: $2,108,700,000
+[2026-02-08 22:14:43] D.E.A.D, membeli 361 unit HE+Shrapnel Granade total: $319,485,000
+[2026-02-11 23:21:40] Code_Vultures membeli 91 unit AK-47 total: $478,935,275
+[2026-02-11 23:22:00] Binary_Bastards membeli 1,047 unit Bandage total: $109,935,000
+[2026-02-11 23:22:20] Byte_Legion menjual 1,155 unit Acid Spray total: $1,212,750,000
+[2026-02-12 07:13:32] Protocol_X membeli 1,212 unit Bandage total: $127,260,000
+[2026-02-12 07:13:52] Proxy_Warriors membeli 357 unit Claymore Mine total: $6,747,300,000
+[2026-02-12 07:14:12] NiteSec menjual 1,008 unit Katana total: $638,668,800
+[2026-02-12 07:14:32] Dusk_Devils membeli 118 unit BMG-50 total: $11,505,000,000
+[2026-02-12 07:14:52] BitRunners membeli 1,180 unit Katana total: $1,495,296,000
+[2026-02-12 07:15:12] Terminal_Terror membeli 322 unit HE Granade total: $113,344,000
+[2026-02-12 07:15:32] Neon_Knights menjual 150 unit Hard Drive Eraser total: $412,500,000
+[2026-02-12 07:15:52] FuncReactor membeli 152 unit Glock total: $45,209,512
+[2026-02-12 07:16:12] Vortex_Logic menjual 834 unit Satellite Phone total: $3,544,500,000
+[2026-02-13 15:45:43] The Ruler membeli 1,177 unit Long Sword total: $529,650,000
+[2026-02-13 15:46:03] NetBurners membeli 1,123 unit Long Sword total: $505,350,000
+[2026-02-13 15:46:23] Zero_Trace membeli 378 unit Hacking Laptop total: $5,408,235,000
+[2026-02-13 15:46:43] Titan_Foundry menjual 317 unit Riot Gear Set total: $2,456,750,000
+[2026-02-13 15:47:03] Echo_Static menjual 997 unit Flamethrower total: $9,222,250,000
+[2026-02-13 15:47:23] WorldGlitch 0x6C1 membeli 848 unit Bandage total: $89,040,000
+[2026-02-13 15:47:43] WorldGlitch 0x6C1 menjual 361 unit Satellite Phone total: $1,534,250,000
+[2026-02-13 15:48:03] Bit_Vanguards menjual 786 unit Night Vision Goggles total: $17,778,677,838
+[2026-02-13 15:48:23] NWO menjual 713 unit Money Counterfeit Kit total: $23,172,500,000
+[2026-02-13 15:48:43] Macro_Mafia menjual 472 unit Hard Drive Eraser total: $1,298,000,000
+[2026-02-13 15:49:03] Dusk_Devils membeli 705 unit Night Vision Goggles total: $31,893,048,030
+[2026-02-13 15:49:23] Vortex_Logic menjual 805 unit Brass Knuckles total: $34,212,500
+[2026-02-13 15:49:43] ZeroDay_Prophets menjual 1,015 unit Zip Ties (100pcs) total: $25,375,000
+[2026-02-13 15:50:03] Black Cross Organisation membeli 943 unit Adrenaline Syringe total: $524,878,515
+[2026-02-13 15:50:23] System_Phantoms membeli 1,199 unit Long Sword total: $539,550,000
+[2026-02-13 15:50:43] Overclock_Outlaws menjual 789 unit Smoke Grenade total: $49,312,500
+[2026-02-13 15:51:03] Dead_Signal membeli 242 unit Dragunov SVD total: $5,324,000,000
+[2026-02-13 15:51:23] Frame_Killers menjual 848 unit AK-47 total: $2,231,522,176
+[2026-02-13 15:51:43] Ghost_Shell_Co menjual 980 unit Signal Jammer total: $10,780,000,000
+[2026-02-13 15:52:03] Nexus_Drifters membeli 916 unit Smoke Grenade total: $114,500,000
+[2026-02-13 15:52:23] FuncReactor membeli 173 unit AK-47 total: $910,503,325
+[2026-02-13 15:52:43] Infinite_Loop_Syndicate membeli 862 unit Signal Jammer total: $18,964,000,000
+[2026-02-13 15:53:03] Aether_Wraith menjual 1,078 unit Tear Gas Canister total: $161,700,000
+[2026-02-13 15:53:23] Failsafe_Zero menjual 678 unit BMG-50 total: $33,052,500,000
+[2026-02-13 15:53:43] Infinite_Loop_Syndicate menjual 540 unit Combat Knife total: $32,834,700
+[2026-02-13 15:54:03] Dark_Fiber membeli 721 unit Katana total: $913,651,200
+[2026-02-13 15:54:23] Bit_Vanguards menjual 369 unit Colt 1911 total: $193,725,000
+[2026-02-13 15:54:43] BitRunners membeli 1,189 unit Long Sword total: $535,050,000
+[2026-02-13 15:55:03] Frame_Killers membeli 479 unit AK-47 total: $2,520,988,975
+[2026-02-13 15:55:23] Black Cross Organisation membeli 1,244 unit Combat Knife total: $151,284,084
+[2026-02-13 15:55:43] BitRunners membeli 1,032 unit Brass Knuckles total: $87,720,000
+[2026-02-13 15:56:03] Ghost Syndicate menjual 1,206 unit Wire Cutter total: $75,375,000
+[2026-02-13 15:56:23] Subnet_Stalkers menjual 1,220 unit Minigun M134 total: $91,500,000,000
+[2026-02-18 08:20:06] Logic_Bombers membeli 809 unit Machete total: $303,375,000
