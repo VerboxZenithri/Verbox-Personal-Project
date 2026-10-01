@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Advanced</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-main: #0a0a0f;
+  --bg-card: rgba(20, 20, 35, 0.8);
+  --accent-1: #00ff88;
+  --accent-2: #00d4ff;
+  --accent-3: #ff00ff;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0c0;
+  --error: #ff3366;
+  --success: #00ff88;
+  --warning: #ffaa00;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-main);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3)); }
+  to { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.menu-btn {
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.menu-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.menu-btn:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-1);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+}
+
+.menu-btn:hover::before {
+  opacity: 0.1;
+}
+
+.menu-btn-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: var(--accent-2);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.menu-btn-label {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.calculator-panel {
+  display: none;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 30px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.calculator-panel.active {
+  display: block;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: var(--accent-1);
+  font-weight: 700;
+}
+
+.back-btn {
+  background: transparent;
+  border: 2px solid var(--accent-2);
+  color: var(--accent-2);
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: var(--accent-2);
+  color: var(--bg-main);
+  transform: scale(1.05);
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.option-btn {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid var(--accent-1);
+  color: var(--text-primary);
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.option-btn:hover {
+  background: var(--accent-1);
+  color: var(--bg-main);
+  transform: scale(1.05);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  color: var(--accent-2);
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.input-field {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--accent-1);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.btn-calculate {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  border: none;
+  color: var(--bg-main);
+  padding: 15px;
+  border-radius: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-calculate:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+}
+
+.result-box {
+  margin-top: 25px;
+  padding: 20px;
+  background: rgba(0, 255, 136, 0.05);
+  border: 2px solid var(--accent-1);
+  border-radius: 12px;
+  display: none;
+}
+
+.result-box.show {
+  display: block;
+  animation: resultPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes resultPop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.result-label {
+  color: var(--accent-1);
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.result-value {
+  font-size: 1.8rem;
+  font-family: 'Orbitron', sans-serif;
+  color: var(--text-primary);
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.error-msg {
+  background: rgba(255, 51, 102, 0.1);
+  border: 2px solid var(--error);
+  color: var(--error);
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: none;
+  animation: shake 0.5s;
+}
+
+.error-msg.show {
+  display: block;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+@media (max-width: 600px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats-result {
+  display: grid;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.stat-name {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
+.stat-value {
+  color: var(--text-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+}
+
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.glow-text {
+  color: var(--accent-1);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>KALKULATOR ADVANCED</h1>
+  </header>
+
+
+  <!-- Main Menu -->
+  <div id="mainMenu" class="menu-grid">
+    <div class="menu-btn" onclick="showPanel('operasiDasar')">
+      <div class="menu-btn-number">01</div>
+      <div class="menu-btn-label">Operasi Dasar</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('pangkatAkar')">
+      <div class="menu-btn-number">02</div>
+      <div class="menu-btn-label">Pangkat & Akar</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('trigonometri')">
+      <div class="menu-btn-number">03</div>
+      <div class="menu-btn-label">Trigonometri</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('logaritma')">
+      <div class="menu-btn-number">04</div>
+      <div class="menu-btn-label">Logaritma</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('faktorial')">
+      <div class="menu-btn-number">05</div>
+      <div class="menu-btn-label">Faktorial & Kombinasi</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('kuadrat')">
+      <div class="menu-btn-number">06</div>
+      <div class="menu-btn-label">Persamaan Kuadrat</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('suhu')">
+      <div class="menu-btn-number">07</div>
+      <div class="menu-btn-label">Konversi Suhu</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('panjang')">
+      <div class="menu-btn-number">08</div>
+      <div class="menu-btn-label">Konversi Panjang</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('berat')">
+      <div class="menu-btn-number">09</div>
+      <div class="menu-btn-label">Konversi Berat</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('sistemBilangan')">
+      <div class="menu-btn-number">10</div>
+      <div class="menu-btn-label">Sistem Bilangan</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('statistik')">
+      <div class="menu-btn-number">11</div>
+      <div class="menu-btn-label">Statistik</div>
+    </div>
+    <div class="menu-btn" onclick="showPanel('matrix')">
+      <div class="menu-btn-number">12</div>
+      <div class="menu-btn-label">Matrix 2×2</div>
+    </div>
+  </div>
+
+  <!-- Panel 1: Operasi Dasar -->
+  <div id="operasiDasar" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">OPERASI DASAR</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setOperation('add')">Tambah (+)</button>
+      <button class="option-btn" onclick="setOperation('subtract')">Kurang (−)</button>
+      <button class="option-btn" onclick="setOperation('multiply')">Kali (×)</button>
+      <button class="option-btn" onclick="setOperation('divide')">Bagi (÷)</button>
+      <button class="option-btn" onclick="setOperation('modulus')">Modulus (%)</button>
+      <button class="option-btn" onclick="setOperation('power')">Pangkat (^)</button>
+    </div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label class="input-label">Angka 1</label>
+        <input type="number" id="opNum1" class="input-field" placeholder="0">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Angka 2</label>
+        <input type="number" id="opNum2" class="input-field" placeholder="0">
+      </div>
+    </div>
+    <button class="btn-calculate" onclick="calculateBasic()">HITUNG</button>
+    <div id="opResult" class="result-box"></div>
+    <div id="opError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 2: Pangkat & Akar -->
+  <div id="pangkatAkar" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">PANGKAT & AKAR</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setPowerOp('square')">Kuadrat (x²)</button>
+      <button class="option-btn" onclick="setPowerOp('cube')">Kubik (x³)</button>
+      <button class="option-btn" onclick="setPowerOp('sqrt')">Akar Kuadrat (√)</button>
+      <button class="option-btn" onclick="setPowerOp('nthroot')">Akar Pangkat N</button>
+      <button class="option-btn" onclick="setPowerOp('powern')">Pangkat N</button>
+    </div>
+    <div id="powerInputs">
+      <div class="input-group">
+        <label class="input-label">Angka</label>
+        <input type="number" id="powerNum" class="input-field" placeholder="0">
+      </div>
+      <div class="input-group" id="powerNGroup" style="display:none;">
+        <label class="input-label">Nilai N</label>
+        <input type="number" id="powerN" class="input-field" placeholder="0">
+      </div>
+    </div>
+    <button class="btn-calculate" onclick="calculatePower()">HITUNG</button>
+    <div id="powerResult" class="result-box"></div>
+    <div id="powerError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 3: Trigonometri -->
+  <div id="trigonometri" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">TRIGONOMETRI</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setTrigFunc('sin')">Sin</button>
+      <button class="option-btn" onclick="setTrigFunc('cos')">Cos</button>
+      <button class="option-btn" onclick="setTrigFunc('tan')">Tan</button>
+      <button class="option-btn" onclick="setTrigFunc('sec')">Sec</button>
+      <button class="option-btn" onclick="setTrigFunc('csc')">Csc</button>
+      <button class="option-btn" onclick="setTrigFunc('cot')">Cot</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Sudut (derajat)</label>
+      <input type="number" id="trigAngle" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateTrig()">HITUNG</button>
+    <div id="trigResult" class="result-box"></div>
+    <div id="trigError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 4: Logaritma -->
+  <div id="logaritma" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">LOGARITMA</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setLogType('log10')">Log₁₀</button>
+      <button class="option-btn" onclick="setLogType('ln')">Ln (Log Natural)</button>
+      <button class="option-btn" onclick="setLogType('logn')">Log Basis N</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Angka</label>
+      <input type="number" id="logNum" class="input-field" placeholder="0">
+    </div>
+    <div class="input-group" id="logBaseGroup" style="display:none;">
+      <label class="input-label">Basis</label>
+      <input type="number" id="logBase" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateLog()">HITUNG</button>
+    <div id="logResult" class="result-box"></div>
+    <div id="logError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 5: Faktorial & Kombinasi -->
+  <div id="faktorial" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">FAKTORIAL & KOMBINASI</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setFactType('factorial')">Faktorial (n!)</button>
+      <button class="option-btn" onclick="setFactType('permutation')">Permutasi (nPr)</button>
+      <button class="option-btn" onclick="setFactType('combination')">Kombinasi (nCr)</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Nilai n</label>
+      <input type="number" id="factN" class="input-field" placeholder="0">
+    </div>
+    <div class="input-group" id="factRGroup" style="display:none;">
+      <label class="input-label">Nilai r</label>
+      <input type="number" id="factR" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateFact()">HITUNG</button>
+    <div id="factResult" class="result-box"></div>
+    <div id="factError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 6: Persamaan Kuadrat -->
+  <div id="kuadrat" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">PERSAMAAN KUADRAT</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <p style="color: var(--text-secondary); margin-bottom: 20px;">Format: ax² + bx + c = 0</p>
+    <div class="grid-2">
+      <div class="input-group">
+        <label class="input-label">Koefisien a</label>
+        <input type="number" id="quadA" class="input-field" placeholder="0">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Koefisien b</label>
+        <input type="number" id="quadB" class="input-field" placeholder="0">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Koefisien c</label>
+      <input type="number" id="quadC" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateQuadratic()">HITUNG</button>
+    <div id="quadResult" class="result-box"></div>
+    <div id="quadError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 7: Konversi Suhu -->
+  <div id="suhu" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">KONVERSI SUHU</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setTempConv('c2f')">C → F</button>
+      <button class="option-btn" onclick="setTempConv('c2k')">C → K</button>
+      <button class="option-btn" onclick="setTempConv('c2r')">C → R</button>
+      <button class="option-btn" onclick="setTempConv('f2c')">F → C</button>
+      <button class="option-btn" onclick="setTempConv('f2k')">F → K</button>
+      <button class="option-btn" onclick="setTempConv('k2c')">K → C</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label" id="tempLabel">Nilai</label>
+      <input type="number" id="tempValue" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateTemp()">KONVERSI</button>
+    <div id="tempResult" class="result-box"></div>
+    <div id="tempError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 8: Konversi Panjang -->
+  <div id="panjang" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">KONVERSI PANJANG</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setLengthConv('m2km')">m → km</button>
+      <button class="option-btn" onclick="setLengthConv('m2cm')">m → cm</button>
+      <button class="option-btn" onclick="setLengthConv('m2mm')">m → mm</button>
+      <button class="option-btn" onclick="setLengthConv('m2ft')">m → ft</button>
+      <button class="option-btn" onclick="setLengthConv('m2in')">m → inch</button>
+      <button class="option-btn" onclick="setLengthConv('km2mi')">km → mil</button>
+      <button class="option-btn" onclick="setLengthConv('mi2km')">mil → km</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label" id="lengthLabel">Nilai</label>
+      <input type="number" id="lengthValue" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateLength()">KONVERSI</button>
+    <div id="lengthResult" class="result-box"></div>
+    <div id="lengthError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 9: Konversi Berat -->
+  <div id="berat" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">KONVERSI BERAT</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setWeightConv('kg2g')">kg → g</button>
+      <button class="option-btn" onclick="setWeightConv('kg2lb')">kg → lb</button>
+      <button class="option-btn" onclick="setWeightConv('kg2ton')">kg → ton</button>
+      <button class="option-btn" onclick="setWeightConv('kg2ons')">kg → ons</button>
+      <button class="option-btn" onclick="setWeightConv('lb2kg')">lb → kg</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label" id="weightLabel">Nilai</label>
+      <input type="number" id="weightValue" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateWeight()">KONVERSI</button>
+    <div id="weightResult" class="result-box"></div>
+    <div id="weightError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 10: Sistem Bilangan -->
+  <div id="sistemBilangan" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">SISTEM BILANGAN</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setNumSys('dec2bin')">Des → Bin</button>
+      <button class="option-btn" onclick="setNumSys('dec2oct')">Des → Oct</button>
+      <button class="option-btn" onclick="setNumSys('dec2hex')">Des → Hex</button>
+      <button class="option-btn" onclick="setNumSys('bin2dec')">Bin → Des</button>
+      <button class="option-btn" onclick="setNumSys('oct2dec')">Oct → Des</button>
+      <button class="option-btn" onclick="setNumSys('hex2dec')">Hex → Des</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label" id="numSysLabel">Nilai</label>
+      <input type="text" id="numSysValue" class="input-field" placeholder="0">
+    </div>
+    <button class="btn-calculate" onclick="calculateNumSys()">KONVERSI</button>
+    <div id="numSysResult" class="result-box"></div>
+    <div id="numSysError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 11: Statistik -->
+  <div id="statistik" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">STATISTIK</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Data (pisahkan dengan spasi)</label>
+      <input type="text" id="statData" class="input-field" placeholder="10 20 30 40 50">
+    </div>
+    <button class="btn-calculate" onclick="calculateStats()">HITUNG</button>
+    <div id="statResult" class="result-box"></div>
+    <div id="statError" class="error-msg"></div>
+  </div>
+
+  <!-- Panel 12: Matrix 2x2 -->
+  <div id="matrix" class="calculator-panel">
+    <div class="panel-header">
+      <div class="panel-title">MATRIX 2×2</div>
+      <button class="back-btn" onclick="backToMenu()">← KEMBALI</button>
+    </div>
+    <div class="options-grid">
+      <button class="option-btn" onclick="setMatrixOp('add')">Penjumlahan</button>
+      <button class="option-btn" onclick="setMatrixOp('multiply')">Perkalian</button>
+      <button class="option-btn" onclick="setMatrixOp('det')">Determinan</button>
+    </div>
+    <div id="matrixInputs">
+      <p style="color: var(--accent-2); margin: 15px 0 10px;">Matrix A</p>
+      <div class="grid-2">
+        <input type="number" id="a11" class="input-field" placeholder="a11">
+        <input type="number" id="a12" class="input-field" placeholder="a12">
+        <input type="number" id="a21" class="input-field" placeholder="a21">
+        <input type="number" id="a22" class="input-field" placeholder="a22">
+      </div>
+      <div id="matrixBInputs">
+        <p style="color: var(--accent-2); margin: 15px 0 10px;">Matrix B</p>
+        <div class="grid-2">
+          <input type="number" id="b11" class="input-field" placeholder="b11">
+          <input type="number" id="b12" class="input-field" placeholder="b12">
+          <input type="number" id="b21" class="input-field" placeholder="b21">
+          <input type="number" id="b22" class="input-field" placeholder="b22">
+        </div>
+      </div>
+    </div>
+    <button class="btn-calculate" onclick="calculateMatrix()">HITUNG</button>
+    <div id="matrixResult" class="result-box"></div>
+    <div id="matrixError" class="error-msg"></div>
+  </div>
+
+
+</div>
+
+<script>
+// Global state
+let currentPanel = null;
+let currentOperation = null;
+
+// Navigation
+function showPanel(panelId) {
+  document.getElementById('mainMenu').style.display = 'none';
+  document.querySelectorAll('.calculator-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  currentPanel = panelId;
+  clearResults();
+}
+
+function backToMenu() {
+  document.querySelectorAll('.calculator-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('mainMenu').style.display = 'grid';
+  currentPanel = null;
+  clearResults();
+}
+
+function clearResults() {
+  document.querySelectorAll('.result-box, .error-msg').forEach(el => {
+    el.classList.remove('show');
+    el.innerHTML = '';
+  });
+}
+
+function showResult(elementId, label, value) {
+  clearResults();
+  const el = document.getElementById(elementId);
+  el.innerHTML = `<div class="result-label">${label}</div><div class="result-value">${value}</div>`;
+  el.classList.add('show');
+}
+
+function showError(elementId, message) {
+  clearResults();
+  const el = document.getElementById(elementId);
+  el.textContent = '⚠ ' + message;
+  el.classList.add('show');
+}
+
+// 1. Operasi Dasar
+function setOperation(op) {
+  currentOperation = op;
+}
+
+function calculateBasic() {
+  const num1 = parseFloat(document.getElementById('opNum1').value);
+  const num2 = parseFloat(document.getElementById('opNum2').value);
+  
+  if (isNaN(num1) || isNaN(num2)) {
+    showError('opError', 'Input tidak valid!');
+    return;
+  }
+  
+  let result, symbol;
+  
+  switch(currentOperation) {
+    case 'add': result = num1 + num2; symbol = '+'; break;
+    case 'subtract': result = num1 - num2; symbol = '−'; break;
+    case 'multiply': result = num1 * num2; symbol = '×'; break;
+    case 'divide':
+      if (num2 === 0) {
+        showError('opError', 'Tidak bisa bagi dengan 0!');
+        return;
+      }
+      result = num1 / num2; symbol = '÷'; break;
+    case 'modulus': result = num1 % num2; symbol = '%'; break;
+    case 'power': result = Math.pow(num1, num2); symbol = '^'; break;
+    default:
+      showError('opError', 'Pilih operasi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('opResult', 'HASIL', `${num1} ${symbol} ${num2} = ${result}`);
+}
+
+// 2. Pangkat & Akar
+let currentPowerOp = null;
+
+function setPowerOp(op) {
+  currentPowerOp = op;
+  const nGroup = document.getElementById('powerNGroup');
+  if (op === 'nthroot' || op === 'powern') {
+    nGroup.style.display = 'block';
+  } else {
+    nGroup.style.display = 'none';
+  }
+}
+
+function calculatePower() {
+  const num = parseFloat(document.getElementById('powerNum').value);
+  const n = parseFloat(document.getElementById('powerN').value);
+  
+  if (isNaN(num)) {
+    showError('powerError', 'Input tidak valid!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentPowerOp) {
+    case 'square':
+      result = Math.pow(num, 2);
+      label = `${num}² = ${result}`;
+      break;
+    case 'cube':
+      result = Math.pow(num, 3);
+      label = `${num}³ = ${result}`;
+      break;
+    case 'sqrt':
+      if (num < 0) {
+        showError('powerError', 'Tidak bisa akar bilangan negatif!');
+        return;
+      }
+      result = Math.sqrt(num);
+      label = `√${num} = ${result}`;
+      break;
+    case 'nthroot':
+      if (isNaN(n) || n === 0) {
+        showError('powerError', 'Nilai N tidak valid!');
+        return;
+      }
+      result = Math.pow(num, 1/n);
+      label = `ⁿ√${num} (n=${n}) = ${result}`;
+      break;
+    case 'powern':
+      if (isNaN(n)) {
+        showError('powerError', 'Nilai N tidak valid!');
+        return;
+      }
+      result = Math.pow(num, n);
+      label = `${num}^${n} = ${result}`;
+      break;
+    default:
+      showError('powerError', 'Pilih operasi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('powerResult', 'HASIL', label);
+}
+
+// 3. Trigonometri
+let currentTrigFunc = null;
+
+function setTrigFunc(func) {
+  currentTrigFunc = func;
+}
+
+function calculateTrig() {
+  const deg = parseFloat(document.getElementById('trigAngle').value);
+  
+  if (isNaN(deg)) {
+    showError('trigError', 'Input tidak valid!');
+    return;
+  }
+  
+  const rad = deg * Math.PI / 180;
+  let result, label;
+  
+  switch(currentTrigFunc) {
+    case 'sin':
+      result = Math.sin(rad);
+      label = `sin(${deg}°) = ${result}`;
+      break;
+    case 'cos':
+      result = Math.cos(rad);
+      label = `cos(${deg}°) = ${result}`;
+      break;
+    case 'tan':
+      result = Math.tan(rad);
+      label = `tan(${deg}°) = ${result}`;
+      break;
+    case 'sec':
+      const cosVal = Math.cos(rad);
+      if (Math.abs(cosVal) < 1e-10) {
+        showError('trigError', 'Sec tidak terdefinisi (cos=0)!');
+        return;
+      }
+      result = 1 / cosVal;
+      label = `sec(${deg}°) = ${result}`;
+      break;
+    case 'csc':
+      const sinVal = Math.sin(rad);
+      if (Math.abs(sinVal) < 1e-10) {
+        showError('trigError', 'Csc tidak terdefinisi (sin=0)!');
+        return;
+      }
+      result = 1 / sinVal;
+      label = `csc(${deg}°) = ${result}`;
+      break;
+    case 'cot':
+      const tanVal = Math.tan(rad);
+      if (Math.abs(tanVal) < 1e-10) {
+        showError('trigError', 'Cot tidak terdefinisi (tan=0)!');
+        return;
+      }
+      result = 1 / tanVal;
+      label = `cot(${deg}°) = ${result}`;
+      break;
+    default:
+      showError('trigError', 'Pilih fungsi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('trigResult', 'HASIL', label);
+}
+
+// 4. Logaritma
+let currentLogType = null;
+
+function setLogType(type) {
+  currentLogType = type;
+  const baseGroup = document.getElementById('logBaseGroup');
+  baseGroup.style.display = type === 'logn' ? 'block' : 'none';
+}
+
+function calculateLog() {
+  const num = parseFloat(document.getElementById('logNum').value);
+  
+  if (isNaN(num) || num <= 0) {
+    showError('logError', 'Log hanya untuk bilangan positif!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentLogType) {
+    case 'log10':
+      result = Math.log10(num);
+      label = `log₁₀(${num}) = ${result}`;
+      break;
+    case 'ln':
+      result = Math.log(num);
+      label = `ln(${num}) = ${result}`;
+      break;
+    case 'logn':
+      const base = parseFloat(document.getElementById('logBase').value);
+      if (isNaN(base) || base <= 0 || base === 1) {
+        showError('logError', 'Base harus > 0 dan ≠ 1!');
+        return;
+      }
+      result = Math.log(num) / Math.log(base);
+      label = `log₍${base}₎(${num}) = ${result}`;
+      break;
+    default:
+      showError('logError', 'Pilih tipe logaritma terlebih dahulu!');
+      return;
+  }
+  
+  showResult('logResult', 'HASIL', label);
+}
+
+// 5. Faktorial & Kombinasi
+let currentFactType = null;
+
+function setFactType(type) {
+  currentFactType = type;
+  const rGroup = document.getElementById('factRGroup');
+  rGroup.style.display = (type === 'permutation' || type === 'combination') ? 'block' : 'none';
+}
+
+function factorial(n) {
+  if (n === 0 || n === 1) return 1;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function permutation(n, r) {
+  return factorial(n) / factorial(n - r);
+}
+
+function combination(n, r) {
+  return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
+function calculateFact() {
+  const n = parseInt(document.getElementById('factN').value);
+  
+  if (isNaN(n) || n < 0) {
+    showError('factError', 'n harus ≥ 0!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentFactType) {
+    case 'factorial':
+      result = factorial(n);
+      label = `${n}! = ${result}`;
+      break;
+    case 'permutation':
+      const r1 = parseInt(document.getElementById('factR').value);
+      if (isNaN(r1) || r1 < 0) {
+        showError('factError', 'r harus ≥ 0!');
+        return;
+      }
+      if (r1 > n) {
+        showError('factError', 'r tidak boleh > n!');
+        return;
+      }
+      result = permutation(n, r1);
+      label = `P(${n},${r1}) = ${result}`;
+      break;
+    case 'combination':
+      const r2 = parseInt(document.getElementById('factR').value);
+      if (isNaN(r2) || r2 < 0) {
+        showError('factError', 'r harus ≥ 0!');
+        return;
+      }
+      if (r2 > n) {
+        showError('factError', 'r tidak boleh > n!');
+        return;
+      }
+      result = combination(n, r2);
+      label = `C(${n},${r2}) = ${result}`;
+      break;
+    default:
+      showError('factError', 'Pilih operasi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('factResult', 'HASIL', label);
+}
+
+// 6. Persamaan Kuadrat
+function calculateQuadratic() {
+  const a = parseFloat(document.getElementById('quadA').value);
+  const b = parseFloat(document.getElementById('quadB').value);
+  const c = parseFloat(document.getElementById('quadC').value);
+  
+  if (isNaN(a) || isNaN(b) || isNaN(c)) {
+    showError('quadError', 'Input tidak valid!');
+    return;
+  }
+  
+  if (a === 0) {
+    showError('quadError', 'Bukan persamaan kuadrat (a=0)!');
+    return;
+  }
+  
+  const D = b * b - 4 * a * c;
+  let resultHTML = `<div class="result-label">DISKRIMINAN (D)</div>`;
+  resultHTML += `<div class="result-value">${D}</div><br>`;
+  
+  if (D > 0) {
+    const x1 = (-b + Math.sqrt(D)) / (2 * a);
+    const x2 = (-b - Math.sqrt(D)) / (2 * a);
+    resultHTML += `<div class="result-label">DUA AKAR REAL BERBEDA</div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">x₁ =</span><span class="stat-value">${x1}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">x₂ =</span><span class="stat-value">${x2}</span></div>`;
+  } else if (D === 0) {
+    const x = -b / (2 * a);
+    resultHTML += `<div class="result-label">DUA AKAR REAL SAMA</div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">x₁ = x₂ =</span><span class="stat-value">${x}</span></div>`;
+  } else {
+    const real = -b / (2 * a);
+    const imag = Math.sqrt(Math.abs(D)) / (2 * a);
+    resultHTML += `<div class="result-label">DUA AKAR KOMPLEKS</div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">x₁ =</span><span class="stat-value">${real} + ${imag}i</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">x₂ =</span><span class="stat-value">${real} - ${imag}i</span></div>`;
+  }
+  
+  const el = document.getElementById('quadResult');
+  el.innerHTML = resultHTML;
+  el.classList.add('show');
+}
+
+// 7. Konversi Suhu
+let currentTempConv = null;
+
+function setTempConv(conv) {
+  currentTempConv = conv;
+  const labels = {
+    'c2f': 'Celsius', 'c2k': 'Celsius', 'c2r': 'Celsius',
+    'f2c': 'Fahrenheit', 'f2k': 'Fahrenheit', 'k2c': 'Kelvin'
+  };
+  document.getElementById('tempLabel').textContent = labels[conv];
+}
+
+function calculateTemp() {
+  const val = parseFloat(document.getElementById('tempValue').value);
+  
+  if (isNaN(val)) {
+    showError('tempError', 'Input tidak valid!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentTempConv) {
+    case 'c2f':
+      result = (val * 9/5) + 32;
+      label = `${val}°C = ${result}°F`;
+      break;
+    case 'c2k':
+      result = val + 273.15;
+      label = `${val}°C = ${result}K`;
+      break;
+    case 'c2r':
+      result = val * 4/5;
+      label = `${val}°C = ${result}°R`;
+      break;
+    case 'f2c':
+      result = (val - 32) * 5/9;
+      label = `${val}°F = ${result}°C`;
+      break;
+    case 'f2k':
+      result = (val - 32) * 5/9 + 273.15;
+      label = `${val}°F = ${result}K`;
+      break;
+    case 'k2c':
+      result = val - 273.15;
+      label = `${val}K = ${result}°C`;
+      break;
+    default:
+      showError('tempError', 'Pilih konversi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('tempResult', 'HASIL', label);
+}
+
+// 8. Konversi Panjang
+let currentLengthConv = null;
+
+function setLengthConv(conv) {
+  currentLengthConv = conv;
+  const labels = {
+    'm2km': 'Meter', 'm2cm': 'Meter', 'm2mm': 'Meter',
+    'm2ft': 'Meter', 'm2in': 'Meter', 'km2mi': 'Kilometer', 'mi2km': 'Mil'
+  };
+  document.getElementById('lengthLabel').textContent = labels[conv];
+}
+
+function calculateLength() {
+  const val = parseFloat(document.getElementById('lengthValue').value);
+  
+  if (isNaN(val)) {
+    showError('lengthError', 'Input tidak valid!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentLengthConv) {
+    case 'm2km': result = val / 1000; label = `${val}m = ${result}km`; break;
+    case 'm2cm': result = val * 100; label = `${val}m = ${result}cm`; break;
+    case 'm2mm': result = val * 1000; label = `${val}m = ${result}mm`; break;
+    case 'm2ft': result = val * 3.28084; label = `${val}m = ${result}ft`; break;
+    case 'm2in': result = val * 39.3701; label = `${val}m = ${result}inch`; break;
+    case 'km2mi': result = val * 0.621371; label = `${val}km = ${result}mil`; break;
+    case 'mi2km': result = val * 1.60934; label = `${val}mil = ${result}km`; break;
+    default:
+      showError('lengthError', 'Pilih konversi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('lengthResult', 'HASIL', label);
+}
+
+// 9. Konversi Berat
+let currentWeightConv = null;
+
+function setWeightConv(conv) {
+  currentWeightConv = conv;
+  const labels = {
+    'kg2g': 'Kilogram', 'kg2lb': 'Kilogram', 'kg2ton': 'Kilogram',
+    'kg2ons': 'Kilogram', 'lb2kg': 'Pound'
+  };
+  document.getElementById('weightLabel').textContent = labels[conv];
+}
+
+function calculateWeight() {
+  const val = parseFloat(document.getElementById('weightValue').value);
+  
+  if (isNaN(val)) {
+    showError('weightError', 'Input tidak valid!');
+    return;
+  }
+  
+  let result, label;
+  
+  switch(currentWeightConv) {
+    case 'kg2g': result = val * 1000; label = `${val}kg = ${result}g`; break;
+    case 'kg2lb': result = val * 2.20462; label = `${val}kg = ${result}lb`; break;
+    case 'kg2ton': result = val / 1000; label = `${val}kg = ${result}ton`; break;
+    case 'kg2ons': result = val * 10; label = `${val}kg = ${result}ons`; break;
+    case 'lb2kg': result = val / 2.20462; label = `${val}lb = ${result}kg`; break;
+    default:
+      showError('weightError', 'Pilih konversi terlebih dahulu!');
+      return;
+  }
+  
+  showResult('weightResult', 'HASIL', label);
+}
+
+// 10. Sistem Bilangan
+let currentNumSys = null;
+
+function setNumSys(sys) {
+  currentNumSys = sys;
+  const labels = {
+    'dec2bin': 'Desimal', 'dec2oct': 'Desimal', 'dec2hex': 'Desimal',
+    'bin2dec': 'Biner', 'oct2dec': 'Oktal', 'hex2dec': 'Hexadesimal'
+  };
+  document.getElementById('numSysLabel').textContent = labels[sys];
+}
+
+function calculateNumSys() {
+  const val = document.getElementById('numSysValue').value.trim();
+  
+  if (!val) {
+    showError('numSysError', 'Input tidak valid!');
+    return;
+  }
+  
+  try {
+    let result, label;
+    
+    switch(currentNumSys) {
+      case 'dec2bin':
+        const dec1 = parseInt(val);
+        result = dec1.toString(2);
+        label = `${dec1}₁₀ = ${result}₂`;
+        break;
+      case 'dec2oct':
+        const dec2 = parseInt(val);
+        result = dec2.toString(8);
+        label = `${dec2}₁₀ = ${result}₈`;
+        break;
+      case 'dec2hex':
+        const dec3 = parseInt(val);
+        result = dec3.toString(16).toUpperCase();
+        label = `${dec3}₁₀ = ${result}₁₆`;
+        break;
+      case 'bin2dec':
+        result = parseInt(val, 2);
+        label = `${val}₂ = ${result}₁₀`;
+        break;
+      case 'oct2dec':
+        result = parseInt(val, 8);
+        label = `${val}₈ = ${result}₁₀`;
+        break;
+      case 'hex2dec':
+        result = parseInt(val, 16);
+        label = `${val}₁₆ = ${result}₁₀`;
+        break;
+      default:
+        showError('numSysError', 'Pilih konversi terlebih dahulu!');
+        return;
+    }
+    
+    if (isNaN(result)) {
+      showError('numSysError', 'Input tidak valid untuk sistem bilangan ini!');
+      return;
+    }
+    
+    showResult('numSysResult', 'HASIL', label);
+  } catch (e) {
+    showError('numSysError', 'Input tidak valid!');
+  }
+}
+
+// 11. Statistik
+function calculateStats() {
+  const input = document.getElementById('statData').value.trim();
+  
+  if (!input) {
+    showError('statError', 'Data kosong!');
+    return;
+  }
+  
+  try {
+    const data = input.split(/\s+/).map(x => parseFloat(x));
+    
+    if (data.some(isNaN)) {
+      showError('statError', 'Data mengandung nilai yang tidak valid!');
+      return;
+    }
+    
+    if (data.length === 0) {
+      showError('statError', 'Data kosong!');
+      return;
+    }
+    
+    const n = data.length;
+    const mean = data.reduce((a, b) => a + b, 0) / n;
+    const sorted = [...data].sort((a, b) => a - b);
+    const median = n % 2 === 0 
+      ? (sorted[n/2 - 1] + sorted[n/2]) / 2 
+      : sorted[Math.floor(n/2)];
+    const variance = data.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / n;
+    const stdDev = Math.sqrt(variance);
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    
+    let resultHTML = '<div class="stats-result">';
+    resultHTML += `<div class="stat-item"><span class="stat-name">Jumlah Data</span><span class="stat-value">${n}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Mean (Rata-rata)</span><span class="stat-value">${mean.toFixed(4)}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Median</span><span class="stat-value">${median.toFixed(4)}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Variance</span><span class="stat-value">${variance.toFixed(4)}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Std Deviasi</span><span class="stat-value">${stdDev.toFixed(4)}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Min</span><span class="stat-value">${min}</span></div>`;
+    resultHTML += `<div class="stat-item"><span class="stat-name">Max</span><span class="stat-value">${max}</span></div>`;
+    resultHTML += '</div>';
+    
+    const el = document.getElementById('statResult');
+    el.innerHTML = resultHTML;
+    el.classList.add('show');
+  } catch (e) {
+    showError('statError', 'Error dalam parsing data!');
+  }
+}
+
+// 12. Matrix 2x2
+let currentMatrixOp = null;
+
+function setMatrixOp(op) {
+  currentMatrixOp = op;
+  const bInputs = document.getElementById('matrixBInputs');
+  bInputs.style.display = op === 'det' ? 'none' : 'block';
+}
+
+function calculateMatrix() {
+  const a11 = parseFloat(document.getElementById('a11').value);
+  const a12 = parseFloat(document.getElementById('a12').value);
+  const a21 = parseFloat(document.getElementById('a21').value);
+  const a22 = parseFloat(document.getElementById('a22').value);
+  
+  if (isNaN(a11) || isNaN(a12) || isNaN(a21) || isNaN(a22)) {
+    showError('matrixError', 'Input Matrix A tidak valid!');
+    return;
+  }
+  
+  let resultHTML = '';
+  
+  if (currentMatrixOp === 'det') {
+    const det = a11 * a22 - a12 * a21;
+    resultHTML = `<div class="result-label">DETERMINAN</div>`;
+    resultHTML += `<div class="result-value">${det}</div>`;
+  } else {
+    const b11 = parseFloat(document.getElementById('b11').value);
+    const b12 = parseFloat(document.getElementById('b12').value);
+    const b21 = parseFloat(document.getElementById('b21').value);
+    const b22 = parseFloat(document.getElementById('b22').value);
+    
+    if (isNaN(b11) || isNaN(b12) || isNaN(b21) || isNaN(b22)) {
+      showError('matrixError', 'Input Matrix B tidak valid!');
+      return;
+    }
+    
+    let c11, c12, c21, c22, opLabel;
+    
+    if (currentMatrixOp === 'add') {
+      c11 = a11 + b11;
+      c12 = a12 + b12;
+      c21 = a21 + b21;
+      c22 = a22 + b22;
+      opLabel = 'HASIL A + B';
+    } else if (currentMatrixOp === 'multiply') {
+      c11 = a11 * b11 + a12 * b21;
+      c12 = a11 * b12 + a12 * b22;
+      c21 = a21 * b11 + a22 * b21;
+      c22 = a21 * b12 + a22 * b22;
+      opLabel = 'HASIL A × B';
+    }
+    
+    resultHTML = `<div class="result-label">${opLabel}</div>`;
+    resultHTML += `<div style="font-family: 'Orbitron', monospace; font-size: 1.2rem; margin-top: 10px;">`;
+    resultHTML += `<div>[ ${c11.toFixed(2)}   ${c12.toFixed(2)} ]</div>`;
+    resultHTML += `<div>[ ${c21.toFixed(2)}   ${c22.toFixed(2)} ]</div>`;
+    resultHTML += `</div>`;
+  }
+  
+  const el = document.getElementById('matrixResult');
+  el.innerHTML = resultHTML;
+  el.classList.add('show');
+}
+</script>
+
+<footer>
+  <p>Made By: <span class="glow-text">Dyles Enserval Verbox</span></p>
+</footer>
+
+</div>
+</body>
+</html>
